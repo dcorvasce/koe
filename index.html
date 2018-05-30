@@ -26,6 +26,12 @@
 
   <div class="container">
     <section class="row">
+      <form class="inline-form" action="/source/new" method="POST">
+        <input type="url" name="url" autocomplete="off" placeholder="https://rubyweekly.com" required>
+        <input type="submit" value="Follow">
+      </form>
+    </section>
+    <section class="row">
       <header>
         <h2 class="is-large">Feed</h2>
       </header>
@@ -55,7 +61,5 @@
       </article>
     </section>
   </div>
-
-  <a role="button" class="float-button">&plus;</a>
 </body>
 </html>

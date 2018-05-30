@@ -165,3 +165,38 @@ a:active {
   margin-right: 10px;
   font-weight: bold;
 }
+
+/* Form */
+
+.inline-form {
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+}
+
+.inline-form input {
+  flex-grow: 1;
+  min-height: 42px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #e7e7e7;
+  border-radius: 3px;
+  font-family: inherit;
+}
+
+.inline-form input[type="submit"] {
+  min-width: 100px;
+  margin-left: 10px;
+  flex-grow: 0;
+  background-color: #444;
+  color: #f8f8f8;
+  transition: 0.3s ease-in background-color;
+  font-weight: bold;
+}
+
+.inline-form input[type="submit"]:hover,
+.inline-form input[type="submit"]:focus,
+.inline-form input[type="submit"]:active {
+  background-color: #222;
+  transition: 0.3s ease-out background-color;
+}
