@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Serif');
+
 /* Resetter */
 
 html, body {
@@ -108,6 +110,15 @@ a:active {
   margin: 20px 0;
 }
 
+.news-article__content {
+  padding: 20px 0;
+  font-size: 1.2em;
+}
+
+.news-article__content img {
+  max-width: 100%;
+}
+
 .news-article__header h3 {
   font-size: 1.5em;
 }
@@ -117,13 +128,13 @@ a:active {
   padding-bottom: 10px;
 }
 
-.news-article__metadata figure {
+.news-article__source {
   display: flex;
   margin: 0;
   align-items: center;
 }
 
-.news-article__metadata figure img {
+.news-article__source img {
   width: 42px;
   height: 42px;
   border: 1px solid transparent;
