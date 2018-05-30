@@ -21,6 +21,11 @@ a:active {
   text-decoration: underline;
 }
 
+.dashboard {
+  display: flex;
+
+}
+
 /* Typography */
 
 .is-large {
@@ -64,7 +69,13 @@ a:active {
 .navbar {
   width: 100%;
   height: 56px;
+  background-color: #444;
+  color: #fff;
   border-bottom: 1px solid #e7e7e7;
+}
+
+.navbar a {
+  color: #f6f7fb;
 }
 
 .navbar__wrapper {
@@ -95,9 +106,26 @@ a:active {
 
 /* Container */
 
-.container {
+.dashboard {
   width: 70%;
   margin: 0 15%;
+}
+
+.container {
+  width: 100%;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.feed {
+  flex-grow: 2 !important;
+  flex-shrink: 0.5;
+}
+
+@media only screen and (max-width: 1024px) {
+  .sources {
+    display: none;
+  }
 }
 
 /* News article */
@@ -199,4 +227,9 @@ a:active {
 .inline-form input[type="submit"]:active {
   background-color: #222;
   transition: 0.3s ease-out background-color;
+}
+
+.source-form {
+  width: 70%;
+  margin: 0 15%;
 }

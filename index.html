@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme-color" content="#f6f7fb">
+  <meta name="theme-color" content="#333">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -24,42 +24,52 @@
     </section>
   </nav>
 
-  <div class="container">
-    <section class="row">
-      <form class="inline-form" action="/source/new" method="POST">
-        <input type="url" name="url" autocomplete="off" placeholder="https://rubyweekly.com" required>
-        <input type="submit" value="Follow">
-      </form>
-    </section>
-    <section class="row">
-      <header>
-        <h2 class="is-large">Feed</h2>
-      </header>
-    </section>
-    <section class="row">
-      <article class="news-article">
-        <header class="news-article__header">
-          <h3>How Google Works</h3>
+  <form class="inline-form source-form" action="/source/new" method="POST">
+    <input type="url" name="url" autocomplete="off" placeholder="https://rubyweekly.com" required>
+    <input type="submit" value="Follow">
+  </form>
+
+  <div class="dashboard">
+    <div class="container sources">
+      <section class="row">
+        <header>
+          <h2 class="is-large">Sources</h2>
         </header>
-        <p class="news-article__summary">
-          Today, we spend a lot of time googling things so we can get shit done..
-        </p>
-        <footer class="news-article__metadata">
-          <figure class="news-article__source">
-            <img src="https://cdn.arstechnica.net/wp-content/themes/ars/assets/img/material-ars-db41652381.png" alt="Ars Technica">
+      </section>
+      <section class="row">
+      </section>
+    </div>
+    <div class="container feed">
+      <section class="row">
+        <header>
+          <h2 class="is-large">Feed</h2>
+        </header>
+      </section>
+      <section class="row">
+        <article class="news-article">
+          <header class="news-article__header">
+            <h3>How Google Works</h3>
+          </header>
+          <p class="news-article__summary">
+            Today, we spend a lot of time googling things so we can get shit done..
+          </p>
+          <footer class="news-article__metadata">
+            <figure class="news-article__source">
+              <img src="https://cdn.arstechnica.net/wp-content/themes/ars/assets/img/material-ars-db41652381.png" alt="Ars Technica">
 
-            <ficaption>
-              <a href="https://arstechnica.com/">Ars Technica</a>
+              <ficaption>
+                <a href="https://arstechnica.com/">Ars Technica</a>
 
-              <section class="news-article__details">
-                <span class="news-article__date">2 minutes ago</span>
-                <span class="news-article__category">Tech</span>
-              </section>
-            </figcaption>
-          </figure>
-        </footer>
-      </article>
-    </section>
+                <section class="news-article__details">
+                  <span class="news-article__date">2 minutes ago</span>
+                  <span class="news-article__category">Tech</span>
+                </section>
+              </figcaption>
+            </figure>
+          </footer>
+        </article>
+      </section>
+    </div>
   </div>
 </body>
 </html>
