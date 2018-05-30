@@ -158,7 +158,7 @@ a:active {
 
 .news-article__source {
   display: flex;
-  margin: 0;
+  margin: 15px 0;
   align-items: center;
 }
 
