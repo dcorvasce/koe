@@ -25,6 +25,38 @@ a:active {
   font-size: 2.6em;
 }
 
+/* Buttons */
+
+.float-button {
+  width: 64px;
+  height: 64px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 64px;
+  background-color: #ff4236;
+  box-shadow: 0 1px 1px 1px #cc342b;
+  color: #fff;
+  margin: 0;
+  font-size: 2em;
+  font-weight: bold;
+  position: fixed;
+  bottom: 64px;
+  right: 64px;
+  text-align: center;
+  text-decoration: none !important;
+  z-index: 9999;
+  transition: 0.3s ease-in background-color;
+}
+
+.float-button:hover,
+.float-button:focus,
+.float-button:active {
+  background-color: #cc342b;
+  transition: 0.3s ease-out background-color;
+  cursor: pointer;
+}
+
 /* Navbar */
 
 .navbar {
@@ -72,6 +104,7 @@ a:active {
   box-shadow: 0 0 2px 2px #e7e7e7;
   padding: 20px 40px;
   box-sizing: border-box;
+  margin: 20px 0;
 }
 
 .news-article__header h3 {
