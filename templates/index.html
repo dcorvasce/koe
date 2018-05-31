@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#333">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
   <title>Koe</title>
 </head>
@@ -38,20 +38,15 @@
         </header>
       </section>
       <section class="row">
-        <figure class="news-article__source">
-          <img src="https://cdn.arstechnica.net/wp-content/themes/ars/assets/img/material-ars-db41652381.png" alt="Ars Technica">
-
-          <ficaption>
-            <a href="https://arstechnica.com/">Ars Technica</a>
-          </figcaption>
-        </figure>
-        <figure class="news-article__source">
-          <img src="https://www.smashingmagazine.com/images/favicon/favicon.png" alt="Ars Technica">
-
-          <ficaption>
-            <a href="https://www.smashingmagazine.com/">Smashing Magazine</a>
-          </figcaption>
-        </figure>
+        {% for source in sources %}
+          <figure class="news-article__source">
+            <img src="{{ source.icon_path }}" alt="{{ source.title }}" aria-hidden="true">
+    
+            <ficaption>
+              <a href="{{ source.url }}" target="_blank">{{ source.title }}</a>
+            </figcaption>
+          </figure>
+        {% endfor %}
       </section>
     </div>
 
