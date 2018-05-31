@@ -29,6 +29,8 @@
     <input type="submit" value="Follow">
   </form>
 
+  <p class="error-container"></p>
+
   <div class="dashboard">
 
     <div class="container sources">
@@ -40,10 +42,10 @@
       <section class="row">
         {% for source in sources %}
           <figure class="news-article__source">
-            <img src="{{ source.icon_path }}" alt="{{ source.title }}" aria-hidden="true">
+            <img src="{{ source['icon_path'] }}" alt="{{ source['title'] }}" aria-hidden="true">
     
             <ficaption>
-              <a href="{{ source.url }}" target="_blank">{{ source.title }}</a>
+              <a href="{{ source['uri'] }}" target="_blank">{{ source.title }}</a>
             </figcaption>
           </figure>
         {% endfor %}
@@ -84,4 +86,6 @@
 
   </div>
 </body>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
 </html>

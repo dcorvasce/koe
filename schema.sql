@@ -5,15 +5,16 @@ CREATE TABLE users (
   email VARCHAR(200) NOT NULL,
   password TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP NOT NULL,
 
   UNIQUE(email)
 );
 
 CREATE TABLE sources (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  uri TEXT NOT NULL,
+  uri VARCHAR(1024) NOT NULL,
   title TEXT NOT NULL,
+  rss_uri TEXT NOT NULL,
+  icon_path TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL,
 
   UNIQUE(uri)
@@ -29,7 +30,7 @@ CREATE TABLE categories (
 
 CREATE TABLE articles (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  uri TEXT NOT NULL,
+  uri VARCHAR(2048) NOT NULL,
   title TEXT NOT NULL,
   preview TEXT NOT NULL,
   category_id INTEGER NOT NULL REFERENCES categories(id),

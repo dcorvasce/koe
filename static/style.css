@@ -233,3 +233,13 @@ a:active {
   width: 70%;
   margin: 0 15%;
 }
+
+.error-container {
+  width: 70%;
+  margin: 0 15%;
+  color:#ff4236;
+  font-weight: bold;
+  padding: 10px;
+  box-sizing: border-box; 
+  font-size: 0.9em;
+}
