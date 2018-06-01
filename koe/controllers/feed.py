@@ -1,5 +1,5 @@
 from flask import request
-from json import dumps
+from json import dumps, loads
 from koe.feed_utilities import find_alternate
 
 class FeedController(object):

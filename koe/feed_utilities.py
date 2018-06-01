@@ -9,7 +9,7 @@ def find_alternate(url):
     '''
     try:
         response = request.urlopen(url)
-        page = response.read()
+        page = response.read().decode('utf-8')
         
         content_type = response.info().get_content_type()
         parser_type = 'html.parser'
@@ -39,7 +39,7 @@ def fetch_xml_info(tree, url):
     headers = {'User-Agent': user_agent}
     req = request.Request(result['origin'], None, headers)
 
-    page = request.urlopen(req).read()
+    page = request.urlopen(req).read().decode('utf-8')
     html = bs4.BeautifulSoup(page, 'html.parser')
 
     result['icon_path'] = find_shortcut_icon(html, result['origin'])
