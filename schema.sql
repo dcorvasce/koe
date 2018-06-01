@@ -20,20 +20,12 @@ CREATE TABLE sources (
   UNIQUE(uri)
 );
 
-CREATE TABLE categories (
-  id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(200) NOT NULL,
-  created_at TIMESTAMP NOT NULL,
-
-  UNIQUE(name)
-);
-
 CREATE TABLE articles (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
   uri VARCHAR(2048) NOT NULL,
   title TEXT NOT NULL,
   preview TEXT NOT NULL,
-  category_id INTEGER NOT NULL REFERENCES categories(id),
+  category VARCHAR(200) NOT NULL DEFAULT 'General',
   source_id INTEGER NOT NULL REFERENCES sources(id),
   published_at DATETIME NOT NULL,
   created_at TIMESTAMP NOT NULL,
