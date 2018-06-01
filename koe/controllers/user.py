@@ -36,6 +36,15 @@ class UserController(object):
         '''Sign in an existing user'''
         pass
 
+    def __current_user(self):
+        '''Returns the current logged user'''
+        user_id = self.session.get('user_id') or 0
+        users_found = self.database.selectAll('SELECT * FROM users WHERE id = %s', user_id)
+
+        if len(users_found) == 0:
+            return None
+        return users_found[0]
+
     def __user_exists(self, email):
         users_found = self.database.selectAll('SELECT * FROM users WHERE email = %s', email)
         return len(users_found) > 0

@@ -18,7 +18,9 @@ db = DB(conn, conn.cursor(pymysql.cursors.DictCursor))
 
 @app.route('/')
 def index():
-    return render_template('index.html', sources=[])
+    if session.get('user_id') is not None:
+        return render_template('index.html', sources=[])
+    return render_template('users/new.html')
 
 @app.route('/source/new', methods=['POST'])
 def new_source():
