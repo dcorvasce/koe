@@ -80,5 +80,3 @@ def find_shortcut_icon(tree, url):
     if icon_uri[0] == '/':
         return url + icon_uri
     return icon_uri
-
-print(find_alternate('https://alistapart.com/main/feed'))

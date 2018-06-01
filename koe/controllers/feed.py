@@ -3,10 +3,12 @@ from json import dumps
 from koe.feed_utilities import find_alternate
 
 class FeedController(object):
-    def __init__(self, database):
+    def __init__(self, database, session):
         self.database = database
+        self.session = session
     
     def create(self):
+        '''Register a new feed source for the current user'''
         source_uri = request.args.get('url')
 
         if source_uri is None:
@@ -17,10 +19,19 @@ class FeedController(object):
         if rss is None:
             return dumps({'error': 'Unable to find RSS'})
     
-        self._create_feed_unless_exists(rss)
-        return dumps({'ok': True, 'rss': rss['uri']})
+        source_id = self.__create_source_unless_exists(rss)
+        return self.__attach_feed_to_user(source_id)
     
-    def _create_feed_unless_exists(self, rss):
+    def __attach_feed_to_user(self, source_id):
+        subscription = {'user_id': self.session['user_id'], 'source_id': source_id}
+        
+        try:
+            self.database.insert('subscriptions', subscription)
+        except Exception:
+            return dumps({'error': "You've already subscribed"})
+        return dumps({'ok': True})
+
+    def __create_source_unless_exists(self, rss):
         query = 'SELECT id FROM sources WHERE uri = %s'
         sources = self.database.selectAll(query, rss['origin'])
 
@@ -31,4 +42,5 @@ class FeedController(object):
                 'rss_uri': rss['uri'],
                 'icon_path': rss['icon_path']
             }
-            self.database.insert('sources', record)
+            return self.database.insert('sources', record)
+        return sources[0]['id']

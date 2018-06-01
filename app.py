@@ -24,7 +24,7 @@ def index():
 
 @app.route('/source/new', methods=['POST'])
 def new_source():
-    controller = FeedController(db)
+    controller = FeedController(db, session)
     return controller.create()
 
 @app.route('/signup')
