@@ -196,10 +196,39 @@ a:active {
 
 /* Form */
 
+.form,
 .inline-form {
   width: 100%;
   padding: 10px 0;
   display: flex;
+}
+
+.form {
+  flex-direction: column;
+}
+
+.form input {
+  min-height: 32px;
+  border: 1px solid #d7d7d7;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form input[type="submit"] {
+  background-color: #444;
+  color: #f8f8f8;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 3px;
+  transition: 0.3s ease-in background-color;
+}
+
+.form input[type="submit"]:hover,
+.form input[type="submit"]:focus,
+.form input[type="submit"]:active {
+  background-color: #222;
+  transition: 0.3s ease-out background-color;
 }
 
 .inline-form input {
@@ -234,6 +263,22 @@ a:active {
   margin: 0 15%;
 }
 
+.form-group {
+  margin: 10px 0;
+}
+
+.sign-form input {
+  width: 100%;
+  display: flex;
+}
+
+.sign-form label {
+  font-weight: bold;
+  font-family: inherit;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
 .error-container {
   width: 70%;
   margin: 0 15%;
@@ -242,4 +287,29 @@ a:active {
   padding: 10px;
   box-sizing: border-box; 
   font-size: 0.9em;
+}
+
+/* Utilities */
+
+.text-center {
+  text-align: center;
+}
+
+.subtitle {
+  color: #777;
+  font-weight: bold;
+}
+
+/* Rows */
+
+.row-70 {
+  width: 50%;
+  margin: 0 25%;
+}
+
+@media only screen and (max-width: 768px) {
+  .row-70 {
+    width: 90%;
+    margin: 0 5%;
+  }
 }

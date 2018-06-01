@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme-color" content="#333">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+  <title>Sign Up | Koe</title>
+</head>
+<body>
+  <nav class="navbar">
+    <section class="navbar__wrapper">
+      <header>
+        <a href="/" class="navbar__brand"><h1>Koe</h1></a>
+      </header>
+      <ul class="navbar__nav">
+        <li><a href="/signin">Sign in</a></li>
+      </ul>
+    </section>
+  </nav>
+
+  <div class="container">
+    <section class="row row-70">
+      <header class="text-center">
+        <h2 class="is-large">Sign Up</h2>
+        <p class="subtitle">Enjoy the experience of a free and modern news reader.</p>
+      </header>
+      <form class="form sign-form" action="/signup" method="POST">
+        <article class="form-group">
+            <label for="first-name">First name</label>
+            <input id="first-name" type="text" name="first_name" placeholder="John" required>
+        </article>
+        <article class="form-group">
+            <label for="last-name">Last name</label>
+            <input id="last-name" type="text" name="last_name" placeholder="Doe" required>
+        </article>
+        <article class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="john.doe@example.com" required>
+        </article>
+        <article class="form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" required>
+        </article>
+        <input type="submit" value="Sign Up">
+        <p class="error-container"></p>
+      </form>
+    </section>
+  </div>
+</body>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</html>
