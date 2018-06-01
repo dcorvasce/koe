@@ -26,6 +26,19 @@ a:active {
 
 }
 
+.link {
+  background-color: transparent;
+  border: 0;
+  color: inherit;
+}
+
+.link:hover,
+.link:focus,
+.link:active {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* Typography */
 
 .is-large {

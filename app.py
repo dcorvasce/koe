@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, redirect
 from koe.db_utilities import DB
 from koe.controllers.feed import FeedController
 from koe.controllers.user import UserController
@@ -23,7 +23,7 @@ def index():
         sources = controller.get_user_feeds()
 
         return render_template('index.html', sources=sources)
-    return render_template('users/new.html')
+    return redirect('/signin')
 
 @app.route('/source/new', methods=['POST'])
 def new_source():
@@ -35,7 +35,22 @@ def new_user():
     controller = UserController(db, session)
     return controller.new()
 
+@app.route('/signin')
+def show_sign_in():
+    controller = UserController(db, session)
+    return controller.show_sign_in()
+
 @app.route('/signup', methods=['POST'])
 def create_user():
     controller = UserController(db, session)
     return controller.create()
+
+@app.route('/signin', methods=['POST'])
+def sign_in():
+    controller = UserController(db, session)
+    return controller.sign_in()
+
+@app.route('/signout', methods=['POST'])
+def sign_out():
+    session['user_id'] = None
+    return redirect('/')

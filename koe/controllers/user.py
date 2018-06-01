@@ -9,7 +9,15 @@ class UserController(object):
     
     def new(self):
         '''Show the sign up form for a new user'''
+        if self.__current_user() is not None:
+            return redirect('/')
         return render_template('users/new.html')
+    
+    def show_sign_in(self):
+        '''Show the sign in form for an existing user'''
+        if self.__current_user() is not None:
+            return redirect('/')
+        return render_template('users/login.html')
 
     def create(self):
         '''Create a new user'''
@@ -31,6 +39,28 @@ class UserController(object):
         self.session['user_id'] = user_id
 
         return dumps({'ok': True})
+
+    def sign_in(self):
+        '''Sign in an existing user'''
+        REQUIRED_PARAMS = ['email', 'password']
+        params = {}
+
+        for param in REQUIRED_PARAMS:
+            if request.form.get(param) is None:
+                return dumps({'error': 'Missing %s' % param.replace('_', ' ')})
+            params[param] = request.form.get(param)
+
+        if self.__user_exists(params['email']) is False:
+            return dumps({'error': 'The user does not exists'})
+
+        user = self.database.selectAll('SELECT id, password FROM users WHERE email = %s', params['email'])[0]
+
+        if checkpw(params['password'].encode('utf8'), user['password'].encode('utf8')) is False:
+            return dumps({'error': 'Wrong password'})
+
+        self.session['user_id'] = user['id']
+        return dumps({'ok': True})
+
 
     def login(self):
         '''Sign in an existing user'''
