@@ -19,7 +19,10 @@ db = DB(conn, conn.cursor(pymysql.cursors.DictCursor))
 @app.route('/')
 def index():
     if session.get('user_id') is not None:
-        return render_template('index.html', sources=[])
+        controller = FeedController(db, session)
+        sources = controller.get_user_feeds()
+
+        return render_template('index.html', sources=sources)
     return render_template('users/new.html')
 
 @app.route('/source/new', methods=['POST'])

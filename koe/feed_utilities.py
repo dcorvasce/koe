@@ -11,20 +11,17 @@ def find_alternate(url):
     if the page is an HTML one. Otherwise, parse the RSS document
     fetching the needed information.
     '''
-    try:
-        req = request.Request(url, None, user_agent())
+    req = request.Request(url, None, user_agent())
 
-        response = request.urlopen(req)
-        page = response.read().decode('utf-8')
-        
-        content_type = response.info().get_content_type()
-        parser_type = 'html.parser'
-
-        if 'xml' in content_type:
-            parser_type = 'xml'
-    except:
-        return None
+    response = request.urlopen(req)
+    page = response.read()
     
+    content_type = response.info().get_content_type()
+    parser_type = 'html.parser'
+
+    if 'xml' in content_type:
+        parser_type = 'xml'
+
     tree = bs4.BeautifulSoup(page, parser_type)
 
     if parser_type == 'xml':
@@ -43,7 +40,7 @@ def fetch_xml_info(tree, url):
     # Fetch the shortcut icon
     req = request.Request(result['origin'], None, user_agent())
 
-    page = request.urlopen(req).read().decode('utf-8')
+    page = request.urlopen(req).read()
     html = bs4.BeautifulSoup(page, 'html.parser')
 
     result['icon_path'] = find_shortcut_icon(html, result['origin'])

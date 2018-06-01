@@ -22,6 +22,16 @@ class FeedController(object):
         source_id = self.__create_source_unless_exists(rss)
         return self.__attach_feed_to_user(source_id)
     
+    def get_user_feeds(self):
+        '''Fetches all the feeds the current user is subscribed to'''
+        user_id = self.session['user_id']
+        query = '''
+                SELECT sources.* FROM sources JOIN subscriptions
+                ON sources.id = subscriptions.source_id AND user_id = %s
+                '''
+
+        return self.database.selectAll(query, user_id)
+
     def __attach_feed_to_user(self, source_id):
         subscription = {'user_id': self.session['user_id'], 'source_id': source_id}
         
