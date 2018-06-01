@@ -59,28 +59,31 @@
         </header>
       </section>
       <section class="row">
-        <article class="news-article">
-          <header class="news-article__header">
-            <h3>How Google Works</h3>
-          </header>
-          <p class="news-article__summary">
-            Today, we spend a lot of time googling things so we can get shit done..
-          </p>
-          <footer class="news-article__metadata">
-            <figure class="news-article__source">
-              <img src="https://cdn.arstechnica.net/wp-content/themes/ars/assets/img/material-ars-db41652381.png" alt="Ars Technica">
+        {% for article in articles %}
+          <article class="news-article">
+            <header class="news-article__header">
+              <h3>{{ article['title'] }}</h3>
+            </header>
+            <p class="news-article__summary">
+              {{ article['preview'] }}
+            </p>
+            <footer class="news-article__metadata">
+              <figure class="news-article__source">
+                <img src="{{ article['origin']['icon_path'] }}"
+                     alt="{{ article['origin']['title'] }}" aria-hidden="true">
 
-              <ficaption>
-                <a href="https://arstechnica.com/">Ars Technica</a>
+                <ficaption>
+                  <a href="{{ article['origin']['uri'] }}">{{ article['origin']['title'] }}</a>
 
-                <section class="news-article__details">
-                  <span class="news-article__date">2 minutes ago</span>
-                  <span class="news-article__category">Tech</span>
-                </section>
-              </figcaption>
-            </figure>
-          </footer>
-        </article>
+                  <section class="news-article__details">
+                    <span class="news-article__date">{{ article['published_at'] }}</span>
+                    <span class="news-article__category">{{ article['category'] }}</span>
+                  </section>
+                </figcaption>
+              </figure>
+            </footer>
+          </article>
+        {% endfor %}
       </section>
     </div>
 
