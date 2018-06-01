@@ -2,16 +2,51 @@ import bs4
 from urllib import request
 
 def find_alternate(url):
-    '''Given a website, tries to detect if it offers RSS feeds.
-    It looks for a link element which has a type of "application/rss+xml"
-    and return the URI attached to it.
+    '''Given a website, fetch data about its RSS version.
+    It looks for a 'link' element which has a type of "application/rss+xml"
+    if the page is an HTML one. Otherwise, parse the RSS document
+    fetching the needed information.
     '''
     try:
-        page = request.urlopen(url).read()
+        response = request.urlopen(url)
+        page = response.read()
+        
+        content_type = response.info().get_content_type()
+        parser_type = 'html.parser'
+
+        if 'xml' in content_type:
+            parser_type = 'xml'
     except:
         return None
     
-    tree = bs4.BeautifulSoup(str(page), 'html.parser')
+    tree = bs4.BeautifulSoup(page, parser_type)
+
+    if parser_type == 'xml':
+        return fetch_xml_info(tree, url)
+    return fetch_html_info(tree, url)
+
+def fetch_xml_info(tree, url):
+    '''Fetch information about the RSS feed from the RSS document itself'''
+    result = {
+        'title': tree.channel.title.text,
+        'origin': tree.channel.link.text,
+        'uri': url,
+        'icon_path': ''
+    }
+
+    # Fetch the shortcut icon
+    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+    headers = {'User-Agent': user_agent}
+    req = request.Request(result['origin'], None, headers)
+
+    page = request.urlopen(req).read()
+    html = bs4.BeautifulSoup(page, 'html.parser')
+
+    result['icon_path'] = find_shortcut_icon(html, result['origin'])
+    return result
+
+def fetch_html_info(tree, url):
+    '''Fetch information about the RSS feed from the HTML page'''
     rss = tree.find(rel='alternate', type='application/rss+xml')
 
     if rss is None:
@@ -21,22 +56,23 @@ def find_alternate(url):
         'title': tree.find('title').text,
         'origin': url,
         'uri': rss.get('href'),
-        'icon_path': find_shortcut_icon(tree)
+        'icon_path': find_shortcut_icon(tree, url)
     }
 
     # If we're working with a relative path
     if result['uri'][0] == '/':
         result['uri'] = result['origin'] + result['uri']
-    
-    if result['icon_path'][0] == '/':
-        result['icon_path'] = result['origin'] + result['icon_path']
 
     return result
 
-def find_shortcut_icon(tree):
+def find_shortcut_icon(tree, url):
     icon = tree.find(rel='icon') or tree.find(rel='shortcut icon')
 
     if icon is None:
         return ''
-    
-    return icon.get('href')
+
+    icon_uri = icon.get('href')
+
+    if icon_uri[0] == '/':
+        return url + icon_uri
+    return icon_uri
