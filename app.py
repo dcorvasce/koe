@@ -21,8 +21,9 @@ def index():
     if session.get('user_id') is not None:
         controller = FeedController(db, session)
         sources = controller.get_user_feeds()
+        articles = controller.get_user_news()
 
-        return render_template('index.html', sources=sources)
+        return render_template('index.html', sources=sources, articles=articles)
     return redirect('/signin')
 
 @app.route('/source/new', methods=['POST'])

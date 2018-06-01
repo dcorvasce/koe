@@ -22,6 +22,20 @@ class FeedController(object):
         source_id = self.__create_source_unless_exists(rss)
         return self.__attach_feed_to_user(source_id)
     
+    def get_user_news(self):
+        '''Fetches all the news the current user is subscribed to'''
+        user_id = self.session['user_id']
+        query = '''
+                SELECT articles.*, sources.icon_path,
+                sources.uri AS origin_uri, sources.title AS origin_title
+                FROM sources, subscriptions, articles
+                WHERE sources.id = subscriptions.source_id AND user_id = %s
+                AND articles.source_id = subscriptions.source_id
+                ORDER BY published_at LIMIT 50
+                '''
+        
+        return self.database.selectAll(query, user_id)
+
     def get_user_feeds(self):
         '''Fetches all the feeds the current user is subscribed to'''
         user_id = self.session['user_id']
