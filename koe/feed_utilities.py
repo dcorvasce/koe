@@ -1,6 +1,10 @@
 import bs4
 from urllib import request
 
+def user_agent():
+    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+    return {'User-Agent': user_agent}
+
 def find_alternate(url):
     '''Given a website, fetch data about its RSS version.
     It looks for a 'link' element which has a type of "application/rss+xml"
@@ -8,7 +12,9 @@ def find_alternate(url):
     fetching the needed information.
     '''
     try:
-        response = request.urlopen(url)
+        req = request.Request(url, None, user_agent())
+
+        response = request.urlopen(req)
         page = response.read().decode('utf-8')
         
         content_type = response.info().get_content_type()
@@ -35,9 +41,7 @@ def fetch_xml_info(tree, url):
     }
 
     # Fetch the shortcut icon
-    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
-    headers = {'User-Agent': user_agent}
-    req = request.Request(result['origin'], None, headers)
+    req = request.Request(result['origin'], None, user_agent())
 
     page = request.urlopen(req).read().decode('utf-8')
     html = bs4.BeautifulSoup(page, 'html.parser')
@@ -76,3 +80,5 @@ def find_shortcut_icon(tree, url):
     if icon_uri[0] == '/':
         return url + icon_uri
     return icon_uri
+
+print(find_alternate('https://alistapart.com/main/feed'))
