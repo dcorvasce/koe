@@ -27,6 +27,8 @@ for source in sources:
     tree = BeautifulSoup(page, 'xml')
     items = tree.findAll('item')
 
+    accepted_date_formats = ['%a, %d %b %Y %H:%M:%S %z', '%a, %d %b %Y %H:%M:%S %Z', '%d %b %Y']
+
     for item in items:
         piece = {
             'source_id': source_id,
@@ -35,10 +37,17 @@ for source in sources:
         }
 
         if item.pubDate is not None:
-            piece['published_at'] = item.pubDate.text
-        else:
+            for date_format in accepted_date_formats:
+                try:
+                    piece['published_at'] = datetime.strptime(item.pubDate.text, date_format)
+                    break
+                except ValueError:
+                    continue
+
+        if piece.get('published_at') is None:
             piece['published_at'] = datetime.now()
 
+        piece['published_at'] = piece['published_at'].strftime('%Y-%m-%d %H:%M')
         news_found = db.selectAll('SELECT id FROM articles WHERE uri = %s', piece['uri'])
 
         if len(news_found) == 0:

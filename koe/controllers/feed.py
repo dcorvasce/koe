@@ -31,7 +31,7 @@ class FeedController(object):
                 FROM sources, subscriptions, articles
                 WHERE sources.id = subscriptions.source_id AND user_id = %s
                 AND articles.source_id = subscriptions.source_id
-                ORDER BY published_at LIMIT 50
+                ORDER BY published_at DESC LIMIT 20
                 '''
         
         return self.database.selectAll(query, user_id)
