@@ -1,5 +1,5 @@
 '''
-Each five minutes, for each source registered in the system
+Each N minutes, for each source registered in the system
 it fetches the new articles, categorize them and store them.
 '''
 import sys
