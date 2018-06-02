@@ -7,7 +7,7 @@ CREATE TABLE users (
   created_at TIMESTAMP NOT NULL,
 
   UNIQUE(email)
-);
+) CHARACTER SET 'utf8mb4';
 
 CREATE TABLE sources (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -18,20 +18,17 @@ CREATE TABLE sources (
   created_at TIMESTAMP NOT NULL,
 
   UNIQUE(uri)
-);
+) CHARACTER SET 'utf8mb4';
 
 CREATE TABLE articles (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  uri VARCHAR(2048) NOT NULL,
+  uri TEXT NOT NULL,
   title TEXT NOT NULL,
-  preview TEXT NOT NULL,
-  category VARCHAR(200) NOT NULL DEFAULT 'General',
-  source_id INTEGER NOT NULL REFERENCES sources(id),
-  published_at DATETIME NOT NULL,
-  created_at TIMESTAMP NOT NULL,
-
-  UNIQUE(uri)
-);
+  category VARCHAR(255) NOT NULL DEFAULT 'General',
+  source_id INT NOT NULL REFERENCES sources(id),
+  published_at TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL
+) CHARACTER SET 'utf8mb4';
 
 CREATE TABLE subscriptions (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,

@@ -14,6 +14,7 @@ class DB(object):
         column_names = ','.join([column for column in columns])
         placeholders = ['%s'] * len(columns)
 
+        self.cursor.execute('SET NAMES utf8mb4')
         query = 'INSERT INTO %s (%s) VALUES(%s)' % (table, column_names, ','.join(placeholders))
 
         self.cursor.execute(query, tuple([columns[index] for index in columns]))

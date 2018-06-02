@@ -4,6 +4,7 @@ from koe.controllers.feed import FeedController
 from koe.controllers.user import UserController
 from flask_session import Session
 import pymysql
+import re
 
 # Configuration
 
@@ -16,6 +17,9 @@ db = DB(conn, conn.cursor(pymysql.cursors.DictCursor))
 
 # Routes
 
+def strip_html(text):
+    return re.sub('<[^<]+?>', '', text)
+
 @app.route('/')
 def index():
     if session.get('user_id') is not None:
@@ -23,7 +27,8 @@ def index():
         sources = controller.get_user_feeds()
         articles = controller.get_user_news()
 
-        return render_template('index.html', sources=sources, articles=articles)
+        return render_template('index.html', sources=sources, articles=articles,
+                                             strip_html=strip_html)
     return redirect('/signin')
 
 @app.route('/source/new', methods=['POST'])
