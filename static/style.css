@@ -325,3 +325,35 @@ a:active {
     margin: 0 5%;
   }
 }
+
+/* Toolbar */
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar .inline-form {
+  width: 100%;
+}
+
+@media only screen and (min-width: 1200px) {
+  .toolbar {
+    flex-direction: row !important;
+  }
+
+  .toolbar .inline-form {
+    width: 50%;
+  }
+
+  .toolbar .inline-form:first-child {
+    margin-right: 30px;
+  }
+}
+
+select {
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 1px solid #e7e7e7;
+}
