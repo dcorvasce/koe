@@ -1,10 +1,12 @@
 from flask import request, render_template, redirect
 from json import dumps
 from bcrypt import hashpw, checkpw, gensalt
+from pymysql import cursors
+from koe.db_utilities import DB
 
 class UserController(object):
-    def __init__(self, database, session):
-        self.database = database
+    def __init__(self, db_connection, session):
+        self.database = DB(db_connection, db_connection.cursor(cursors.DictCursor))
         self.session = session
     
     def new(self):

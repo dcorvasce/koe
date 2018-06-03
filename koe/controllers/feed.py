@@ -1,10 +1,12 @@
 from flask import request
 from json import dumps
 from koe.feed_utilities import find_alternate
+from pymysql import cursors
+from koe.db_utilities import DB
 
 class FeedController(object):
-    def __init__(self, database, session):
-        self.database = database
+    def __init__(self, db_connection, session):
+        self.database = DB(db_connection, db_connection.cursor(cursors.DictCursor))
         self.session = session
     
     def create(self):

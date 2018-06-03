@@ -4,7 +4,6 @@ from koe.controllers.feed import FeedController
 from koe.controllers.user import UserController
 from flask_session import Session
 import pymysql
-import re
 
 # Configuration
 
@@ -13,52 +12,46 @@ SESSION_TYPE = 'filesystem'
 app.config.from_object(__name__)
 Session(app)
 conn = pymysql.connect('localhost', 'root', 'password', 'koe', charset='utf8')
-db = DB(conn, conn.cursor(pymysql.cursors.DictCursor))
 
 # Routes
-
-def strip_html(text):
-    return re.sub('<[^<]+?>', '', text)
-
 @app.route('/')
 def index():
     if session.get('user_id') is not None:
-        controller = FeedController(db, session)
+        controller = FeedController(conn, session)
         sources = controller.get_user_feeds()
         articles = controller.get_user_news()
 
-        return render_template('index.html', sources=sources, articles=articles,
-                                             strip_html=strip_html)
+        return render_template('index.html', sources=sources, articles=articles)
     return redirect('/signin')
 
 @app.route('/source/new', methods=['POST'])
 def new_source():
-    controller = FeedController(db, session)
+    controller = FeedController(conn, session)
     return controller.create()
 
 @app.route('/news/<source>')
 def news_by_source(source):
-    controller = FeedController(db, session)
+    controller = FeedController(conn, session)
     return controller.get_news_by_source(source)
 
 @app.route('/signup')
 def new_user():
-    controller = UserController(db, session)
+    controller = UserController(conn, session)
     return controller.new()
 
 @app.route('/signin')
 def show_sign_in():
-    controller = UserController(db, session)
+    controller = UserController(conn, session)
     return controller.show_sign_in()
 
 @app.route('/signup', methods=['POST'])
 def create_user():
-    controller = UserController(db, session)
+    controller = UserController(conn, session)
     return controller.create()
 
 @app.route('/signin', methods=['POST'])
 def sign_in():
-    controller = UserController(db, session)
+    controller = UserController(conn, session)
     return controller.sign_in()
 
 @app.route('/signout', methods=['POST'])

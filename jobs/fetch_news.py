@@ -22,7 +22,7 @@ for source in sources:
     req = request.Request(source['uri'], None, user_agent())
 
     response = request.urlopen(req)
-    page = response.read().decode('utf8')
+    page = response.read()
 
     tree = BeautifulSoup(page, 'xml')
     items = tree.findAll('item')
