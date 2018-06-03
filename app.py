@@ -1,8 +1,7 @@
 from flask import Flask, render_template, session, redirect
 from config.session import start_session
 from config.database import conn
-from koe.controllers.feed import FeedController
-from koe.controllers.user import UserController
+from koe.controllers import *
 import pymysql
 
 app = Flask(__name__)
@@ -12,7 +11,7 @@ start_session(app)
 @app.route('/')
 def index():
     if session.get('user_id') is not None:
-        controller = FeedController(conn, session)
+        controller = UserController(conn, session)
         sources = controller.get_user_feeds()
         articles = controller.get_user_news()
 
@@ -31,23 +30,23 @@ def news_by_source(source):
 
 @app.route('/signup')
 def new_user():
-    controller = UserController(conn, session)
-    return controller.new()
+    controller = AuthController(conn, session)
+    return controller.show_register()
 
 @app.route('/signin')
 def show_sign_in():
-    controller = UserController(conn, session)
-    return controller.show_sign_in()
+    controller = AuthController(conn, session)
+    return controller.show_login()
 
 @app.route('/signup', methods=['POST'])
 def create_user():
-    controller = UserController(conn, session)
-    return controller.create()
+    controller = AuthController(conn, session)
+    return controller.register()
 
 @app.route('/signin', methods=['POST'])
 def sign_in():
-    controller = UserController(conn, session)
-    return controller.sign_in()
+    controller = AuthController(conn, session)
+    return controller.login()
 
 @app.route('/signout', methods=['POST'])
 def sign_out():
