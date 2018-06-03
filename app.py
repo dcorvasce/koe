@@ -1,17 +1,12 @@
 from flask import Flask, render_template, session, redirect
-from koe.db_utilities import DB
+from config.session import start_session
+from config.database import conn
 from koe.controllers.feed import FeedController
 from koe.controllers.user import UserController
-from flask_session import Session
 import pymysql
 
-# Configuration
-
 app = Flask(__name__)
-SESSION_TYPE = 'filesystem'
-app.config.from_object(__name__)
-Session(app)
-conn = pymysql.connect('localhost', 'root', 'password', 'koe', charset='utf8')
+start_session(app)
 
 # Routes
 @app.route('/')

@@ -21,6 +21,10 @@ Then use **pip** to install the necessary dependencies:
 pip install -r requirements.txt
 ```
 
+## Getting Started
+
+Rename `.env.example` to `.env` and edit the necessary fields.
+
 ## License
 
 The code in this repository is licensed under [GNU/GPL v3](LICENSE).
