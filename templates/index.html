@@ -36,7 +36,7 @@
       </form>
     
       
-      <form class="inline-form source-filter" action="/news/fetching" method="POST">
+      <form class="inline-form source-filter">
         <select name="source_id">
           <option value="0" selected>-- All --</option>
           {% for source in sources %}
@@ -107,4 +107,26 @@
 </body>
 
 <script src="{{ url_for('static', filename='app.js') }}"></script>
+<script type="x-tmpl" id="article-template">
+  <article class="news-article" data-source-id=":origin_id">
+    <header class="news-article__header">
+      <a href=":uri" target="_blank"><h3>:title</h3></a>
+    </header>
+    <footer class="news-article__metadata">
+      <figure class="news-article__source">
+        <img src=":icon_path"
+             alt=":origin_title" aria-hidden="true">
+
+        <ficaption>
+          <a href=":origin_uri">:origin_title</a>
+
+          <section class="news-article__details">
+            <span class="news-article__date">:published_at</span>
+            <span class="news-article__category">:category</span>
+          </section>
+        </figcaption>
+      </figure>
+    </footer>
+  </article>
+</script>
 </html>

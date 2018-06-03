@@ -65,13 +65,38 @@
 
             const form = ev.target;
             const sourceId = form.querySelector('select option:checked').value;
+            const template = document.querySelector('#article-template').innerHTML;
+            const newsContainer = document.querySelector('.news');
 
             if (parseInt(sourceId) === 0) {
                 location.href = '/';
                 return;
             }
 
-            location.href = `/?filter_by=${sourceId}`;
+            fetch(`/news/${sourceId}`, {
+                method: 'GET',
+                credentials: 'same-origin',
+            }).then((response) => {
+                response
+                    .json()
+                    .then((news) => {
+                        console.log(news)
+                        newsContainer.innerHTML = '';
+
+                        news.forEach((piece) => {
+                            const keys = Object.keys(piece);
+                            let article = template;
+
+                            keys.forEach((key) => {
+                                article = article.replace(new RegExp(`:${key}`, 'g'), piece[key]);
+                            });
+
+                            newsContainer.innerHTML += article;
+                        });
+                    });
+            }).catch((error) => {
+                console.log(error);
+            })
         });
     }
 })();
