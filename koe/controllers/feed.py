@@ -18,15 +18,18 @@ class FeedController(object):
 
         if rss is None:
             return dumps({'error': 'Unable to find RSS'})
-    
+
+        if self.session.get('user_id') is None:
+            return dumps({'error': 'Unauthorized request'})
+
         source_id = self.__create_source_unless_exists(rss)
         return self.__attach_feed_to_user(source_id)
     
     def get_user_news(self):
         '''Fetches all the news the current user is subscribed to'''
-        user_id = self.session['user_id']
+        user_id = self.session.get('user_id') or 0
         query = '''
-                SELECT articles.*, sources.icon_path,
+                SELECT articles.*, sources.icon_path, sources.id AS origin_id,
                 sources.uri AS origin_uri, sources.title AS origin_title
                 FROM sources, subscriptions, articles
                 WHERE sources.id = subscriptions.source_id AND user_id = %s
@@ -35,10 +38,25 @@ class FeedController(object):
                 '''
         
         return self.database.selectAll(query, user_id)
+    
+    def get_news_by_source(self, source_id):
+        '''Fetches all the news of a specific source'''
+        user_id = self.session['user_id'] or 0
+        query = '''
+                SELECT articles.*, sources.icon_path, sources.id AS origin_id,
+                sources.uri AS origin_uri, sources.title AS origin_title
+                FROM sources, subscriptions, articles
+                WHERE sources.id = subscriptions.source_id AND user_id = %s
+                AND articles.source_id = subscriptions.source_id
+                AND articles.source_id = %s
+                ORDER BY published_at DESC LIMIT 20
+                '''
+        news = self.database.selectAll(query, (user_id, source_id))
+        return dumps(news, default=str)
 
     def get_user_feeds(self):
         '''Fetches all the feeds the current user is subscribed to'''
-        user_id = self.session['user_id']
+        user_id = self.session['user_id'] or 0
         query = '''
                 SELECT sources.* FROM sources JOIN subscriptions
                 ON sources.id = subscriptions.source_id AND user_id = %s

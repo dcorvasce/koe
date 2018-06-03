@@ -36,7 +36,7 @@
       </form>
     
       
-      <form class="inline-form news-filter" action="/news/fetching" method="POST">
+      <form class="inline-form source-filter" action="/news/fetching" method="POST">
         <select name="source_id">
           <option value="0" selected>-- All --</option>
           {% for source in sources %}
@@ -77,9 +77,9 @@
           <h2 class="is-large">Feed</h2>
         </header>
       </section>
-      <section class="row">
+      <section class="row news">
         {% for article in articles %}
-          <article class="news-article">
+          <article class="news-article" data-source-id="{{ article['origin_id'] }}">
             <header class="news-article__header">
               <a href="{{ article['uri'] }}" target="_blank"><h3>{{ article['title'] }}</h3></a>
             </header>

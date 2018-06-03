@@ -36,6 +36,11 @@ def new_source():
     controller = FeedController(db, session)
     return controller.create()
 
+@app.route('/news/<source>')
+def news_by_source(source):
+    controller = FeedController(db, session)
+    return controller.get_news_by_source(source)
+
 @app.route('/signup')
 def new_user():
     controller = UserController(db, session)

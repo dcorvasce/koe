@@ -2,6 +2,7 @@
     const parseResponseJSON = (request) => {
         request.then((response) => {
             const errorContainer = document.querySelector('.error-container');
+            errorContainer.innerText = '';
 
             response
                 .json()
@@ -41,19 +42,36 @@
 
             const form = ev.target;
             const url = form.getAttribute('action');
-            const errorContainer = document.querySelector('.error-container');
             let body = new FormData();
 
             form.querySelectorAll('input').forEach((input) => {
                 body.append(input.name, input.value);
             });
 
-            errorContainer.innerText = '';
             parseResponseJSON(fetch(url, {
                 method: 'POST',
                 credentials: 'same-origin',
                 body: body,
             }));
+        });
+    }
+
+    const news = document.querySelector('.news');
+    const sourceFilter = document.querySelector('.source-filter');
+
+    if (news && sourceFilter) {
+        sourceFilter.addEventListener('submit', (ev) => {
+            ev.preventDefault();
+
+            const form = ev.target;
+            const sourceId = form.querySelector('select option:checked').value;
+
+            if (parseInt(sourceId) === 0) {
+                location.href = '/';
+                return;
+            }
+
+            location.href = `/?filter_by=${sourceId}`;
         });
     }
 })();
