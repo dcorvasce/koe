@@ -6,6 +6,7 @@ import sys
 sys.path.append('../koe')
 
 import pymysql
+from classifier.classifier import classify
 from datetime import datetime
 from urllib import request
 from bs4 import BeautifulSoup
@@ -35,6 +36,14 @@ for source in sources:
             'title': item.title.text,
             'uri': item.link.text
         }
+
+        article_content = item.content or item.summary or item.description
+
+        if article_content is not None:
+            article_content = "%s %s" % (piece['title'], article_content.text)
+        else:
+            article_content = piece['title']
+        piece['category'] = classify(article_content)
 
         if item.pubDate is not None:
             for date_format in accepted_date_formats:
