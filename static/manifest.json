@@ -1,0 +1,8 @@
+{
+    "short_name": "Koe",
+    "name": "Koe",
+    "start_url": "/",
+    "display": "fullscreen",
+    "theme_color": "#222",
+    "background_color": "#f8f8f8"
+}

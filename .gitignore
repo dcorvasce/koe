@@ -110,4 +110,5 @@ package-lock.json
 node_modules
 
 # public assets
-static/*
+static/app.*
+static/style.*
