@@ -6,6 +6,8 @@ A simple news reader wrote in Flask.
 
 - Python 3.x
 - pip
+- Node
+- npm
 
 ## Installation
 
@@ -19,6 +21,13 @@ Then use **pip** to install the necessary dependencies:
 
 ```shell
 pip install -r requirements.txt
+```
+
+And run **npm** to build the application assets:
+
+```shell
+npm i
+npm run build
 ```
 
 ## Getting Started
