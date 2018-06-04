@@ -3,6 +3,7 @@
         request.then((response) => {
             const errorContainer = document.querySelector('.error-container');
             errorContainer.innerText = '';
+            errorContainer.classList.remove('fade-out');
 
             response
                 .json()
@@ -12,9 +13,11 @@
                     }
 
                     errorContainer.innerText = body.error;
+                    errorContainer.classList.add('fade-out');
                 });
         }).catch((error) => {
             errorContainer.innerText = error;
+            errorContainer.classList.add('fade-out');
         });
     };
 
@@ -57,10 +60,10 @@
     }
 
     const news = document.querySelector('.news');
-    const sourceFilter = document.querySelector('.source-filter');
+    const sourceFilter = document.querySelector('.source-filter select');
 
     if (news && sourceFilter) {
-        sourceFilter.addEventListener('submit', (ev) => {
+        sourceFilter.addEventListener('change', (ev) => {
             ev.preventDefault();
 
             const form = ev.target;

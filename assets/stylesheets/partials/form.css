@@ -1,3 +1,9 @@
+:root {
+  --button-background-color: #444;
+  --button-foreground-color: #f8f8f8;
+  --button-hover-background-color: #222;
+}
+
 .form,
 .inline-form {
   width: 100%;
@@ -7,57 +13,66 @@
 
 .form {
   flex-direction: column;
+
+  & input {
+    min-height: 32px;
+    border: 1px solid #d7d7d7;
+    border-radius: 200px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+  
+  & input[type="submit"] {
+    background-color: var(--button-background-color);
+    color: var(--button-foreground-color);
+    border: 1px solid transparent;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 3px;
+    border-radius: 200px;
+    padding: 10px 20px;
+    transition: 0.3s ease-in background-color;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: var(--button-hover-background-color);
+      transition: 0.3s ease-out background-color;
+    }
+  }
 }
 
-.form input {
-  min-height: 32px;
-  border: 1px solid #d7d7d7;
-  padding: 10px;
-  box-sizing: border-box;
-  font-family: inherit;
-}
-
-.form input[type="submit"] {
-  background-color: #444;
-  color: #f8f8f8;
-  font-weight: bold;
-  text-transform: uppercase;
-  border-radius: 3px;
-  transition: 0.3s ease-in background-color;
-}
-
-.form input[type="submit"]:hover,
-.form input[type="submit"]:focus,
-.form input[type="submit"]:active {
-  background-color: #222;
-  transition: 0.3s ease-out background-color;
-}
-
-.inline-form input {
-  flex-grow: 1;
-  min-height: 42px;
-  padding: 10px;
-  box-sizing: border-box;
-  border: 1px solid #e7e7e7;
-  border-radius: 3px;
-  font-family: inherit;
-}
-
-.inline-form input[type="submit"] {
-  min-width: 100px;
-  margin-left: 10px;
-  flex-grow: 0;
-  background-color: #444;
-  color: #f8f8f8;
-  transition: 0.3s ease-in background-color;
-  font-weight: bold;
-}
-
-.inline-form input[type="submit"]:hover,
-.inline-form input[type="submit"]:focus,
-.inline-form input[type="submit"]:active {
-  background-color: #222;
-  transition: 0.3s ease-out background-color;
+.inline-form {
+  & input {
+    flex-grow: 1;
+    min-height: 42px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border: 1px solid #e7e7e7;
+    border-radius: 200px;
+    font-family: inherit;
+  }
+  
+  & button {
+    min-width: 100px;
+    margin-left: 10px;
+    flex-grow: 0;
+    background-color: var(--button-background-color);
+    color: var(--button-foreground-color);
+    border: 1px solid transparent;
+    font-size: 0.9em;
+    border-radius: 200px;
+    transition: 0.3s ease-in background-color;
+    font-weight: bold;
+  
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: var(--button-hover-background-color);
+      transition: 0.3s ease-out background-color;
+    }
+  }
 }
 
 .source-form {
@@ -67,26 +82,42 @@
 
 .form-group {
   margin: 10px 0;
-}
-
-.sign-form input {
-  width: 100%;
   display: flex;
+  flex-direction: column;
 }
 
-.sign-form label {
-  font-weight: bold;
-  font-family: inherit;
-  text-transform: uppercase;
-  margin-bottom: 5px;
+.sign-form {
+  & input {
+    width: 100%;
+    display: flex;
+  }
+  
+  & label {
+    font-weight: bold;
+    font-family: inherit;
+    text-transform: uppercase;
+    padding: 0 10px;
+    margin-bottom: 10px;
+  }
+
+  & input[type="submit"] {
+    padding: 15px 10px;
+    text-align: center;
+    display: block;
+  }
 }
 
 .error-container {
   width: 70%;
   margin: 0 15%;
-  color:#ff4236;
+  color: #ff4236;
   font-weight: bold;
   padding: 10px;
   box-sizing: border-box; 
   font-size: 0.9em;
+}
+
+.error-container.fade-out {
+  opacity: 0;
+  transition: 3s ease-out opacity;
 }

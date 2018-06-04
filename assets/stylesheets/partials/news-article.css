@@ -1,53 +1,47 @@
+:root {
+  --background-color: #fff;
+  --shadow-color: #e7e7e7;
+  --category-background-color: #333;
+  --category-foreground-color: #f8f8f8;
+  --date-foreground-color: #444;
+}
 
 .news-article {
-    box-shadow: 0 0 2px 2px #e7e7e7;
-    border-radius: 3px;
-    padding: 20px 40px;
-    box-sizing: border-box;
-    margin: 20px 0;
-  }
-  
-  .news-article__content {
+  background-color: var(--background-color);
+  box-shadow: 0 0 2px 2px var(--shadow-color);
+  border-radius: 3px;
+  padding: 20px 40px;
+  box-sizing: border-box;
+  margin: 20px 0;
+
+  & .news-article__content {
     padding: 20px 0;
     font-size: 1.2em;
   }
   
-  .news-article__content img {
+  & .news-article__content img {
     max-width: 100%;
   }
   
-  .news-article__header h3 {
+  & .news-article__header h3 {
     font-size: 1.5em;
   }
   
-  .news-article__summary {
+  & .news-article__summary {
     color: #777;
     padding-bottom: 10px;
   }
   
-  .news-article__source {
-    display: flex;
-    margin: 15px 0;
-    align-items: center;
-  }
-  
-  .news-article__source img {
-    width: 42px;
-    height: 42px;
-    border: 1px solid transparent;
-    margin-right: 10px;
-  }
-  
-  .news-article__details {
+  & .news-article__details {
     width: 100%;
     display: inline-flex;
     flex-grow: 1;
     align-items: center;
   }
   
-  .news-article__category {
-    background-color: #333;
-    color: #f6f7fb;
+  & .news-article__category {
+    background-color: var(--category-background-color);
+    color: var(--category-foreground-color);
     border-radius: 3px;
     padding: 5px 10px;
     font-weight: bold;
@@ -55,10 +49,24 @@
     text-transform: uppercase;
   }
   
-  .news-article__date {
+  & .news-article__date {
     font-size: 0.9em;
-    color: #777;
+    color: var(--date-foreground-color);
     margin-right: 10px;
     font-weight: bold;
   }
-  
+}
+
+.news-article__source {
+  display: flex;
+  margin: 15px 0;
+  align-items: center;
+  margin-right: 20px;
+
+  & img {
+    width: 42px;
+    height: 42px;
+    border: 1px solid transparent;
+    margin-right: 10px;
+  }
+}

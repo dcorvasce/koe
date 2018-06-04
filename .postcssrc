@@ -1,6 +1,7 @@
 {
     "plugins": {
         "postcss-cssnext": {},
-        "postcss-nesting": {}
+        "postcss-nesting": {},
+        "postcss-css-variables": {}
     }
 }

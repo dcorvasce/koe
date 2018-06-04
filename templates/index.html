@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="theme-color" content="#333">
 
+  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet"> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
@@ -20,11 +21,7 @@
       <ul class="navbar__nav">
         <li><a href="/">Feed</a></li>
         <li><a href="/">Profile</a></li>
-        <li>
-          <form action="/signout" method="POST">
-            <input class="link" type="submit" value="Sign out">
-          </form>
-        </li>
+        <li><a href="#" data-action="sign-out">Sign out</a></li>
       </ul>
     </section>
   </nav>
@@ -32,19 +29,16 @@
   <section class="toolbar source-form">
       <form class="inline-form" action="/source/new" method="POST">
         <input type="url" name="url" autocomplete="off" placeholder="https://rubyweekly.com" required>
-        <input type="submit" value="Follow">
+        <button type="submit"><i class="fas fa-plus-circle"></i> Follow</button>
       </form>
-    
       
       <form class="inline-form source-filter">
         <select name="source_id">
-          <option value="0" selected>-- All --</option>
+          <option value="0" selected>All sources</option>
           {% for source in sources %}
             <option value="{{ source.id }}">{{ source.title }}</option>
           {% endfor %}
         </select>
-    
-        <input type="submit" value="Filter">
       </form>
   </section>
 
@@ -55,7 +49,7 @@
     <div class="container sources">
       <section class="row">
         <header>
-          <h2 class="is-large">Sources</h2>
+          <h2 class="is-large"><i class="fas fa-globe"></i> Sources</h2>
         </header>
       </section>
       <section class="row">
@@ -74,7 +68,7 @@
     <div class="container feed">
       <section class="row">
         <header>
-          <h2 class="is-large">Feed</h2>
+          <h2 class="is-large"><i class="fas fa-rss-square"></i> Feed</h2>
         </header>
       </section>
       <section class="row news">
@@ -106,6 +100,8 @@
   </div>
 </body>
 
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 <script src="{{ url_for('static', filename='app.js') }}"></script>
 <script type="x-tmpl" id="article-template">
   <article class="news-article" data-source-id=":origin_id">
