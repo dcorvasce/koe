@@ -1,0 +1,29 @@
+{
+  "name": "koe",
+  "version": "0.1.0",
+  "description": "A simple news reader wrote in Python.",
+  "main": "assets/index.js",
+  "scripts": {
+    "build-js": "parcel build assets/javascripts/app.js --out-dir static",
+    "build-css": "parcel build assets/stylesheets/style.css --out-dir static",
+    "build": "npm run build-js && npm run build-css",
+    "watch-js": "parcel watch assets/javascripts/app.js --out-dir static",
+    "watch-css": "parcel watch assets/stylesheets/style.css --out-dir static"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/domcorvasce/koe.git"
+  },
+  "author": "Dom Corvasce <dom.corvasce@yandex.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/domcorvasce/koe/issues"
+  },
+  "homepage": "https://github.com/domcorvasce/koe#readme",
+  "dependencies": {
+    "babel-preset-env": "^1.7.0",
+    "parcel-bundler": "^1.8.1",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-nesting": "^5.0.0"
+  }
+}

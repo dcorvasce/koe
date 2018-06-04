@@ -104,3 +104,10 @@ venv.bak/
 .mypy_cache/
 
 flask_session
+
+# node
+package-lock.json
+node_modules
+
+# public assets
+static/*
