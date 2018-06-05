@@ -41,11 +41,12 @@ def fetch_feed_tree(source):
 def get_article_date(item):
     accepted_date_formats = get_date_formats()
     date = datetime.now()
+    published_date = item.pubDate or item.published
 
-    if item.pubDate is not None:
+    if published_date is not None:
         for date_format in accepted_date_formats:
             try:
-                piece['published_at'] = datetime.strptime(item.pubDate.text, date_format)
+                piece['published_at'] = datetime.strptime(published_date.text, date_format)
                 break
             except ValueError:
                 continue
@@ -71,7 +72,7 @@ for source in sources:
     index_link = None
 
     tree = fetch_feed_tree(source)
-    items = tree.findAll('item')
+    items = tree.findAll('item') or tree.findAll('entry')
 
     for item in items:
         if index_link is None:
@@ -89,6 +90,8 @@ for source in sources:
         piece['published_at'] = piece['published_at'].strftime('%Y-%m-%d %H:%M')
 
         db.insert('articles', piece)
-    db.query('UPDATE sources SET latestlink_fetched = %s WHERE id = %s', (index_link, source_id))
-
+    try:
+        db.query('UPDATE sources SET latestlink_fetched = %s WHERE id = %s', (index_link, source_id))
+    except Exception:
+        print('An error occured, unable to save the items')
 print('Articles fetched: %d' % articles_fetched)
