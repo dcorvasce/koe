@@ -67,7 +67,8 @@ class FeedController(Controller):
                 'title': rss['title'],
                 'uri': rss['origin'],
                 'rss_uri': rss['uri'],
-                'icon_path': rss['icon_path']
+                'icon_path': rss['icon_path'],
+                'latestlink_fetched': 'na'
             }
             return self.database.insert('sources', record)
         return sources[0]['id']

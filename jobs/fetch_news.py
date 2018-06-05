@@ -5,59 +5,90 @@ it fetches the new articles, categorize them and store them.
 import sys
 sys.path.append('../koe')
 
-import pymysql
+from config.database import conn
+from pymysql import cursors
+from koe.db_utilities import DB
 from classifier.classifier import classify
 from datetime import datetime
 from urllib import request
 from bs4 import BeautifulSoup
-from koe.db_utilities import DB
 from koe.feed_utilities import user_agent
 
-conn = pymysql.connect('localhost', 'root', 'password', 'koe', charset='utf8')
-db = DB(conn, conn.cursor(pymysql.cursors.DictCursor))
+db = DB(conn, conn.cursor(cursors.DictCursor))
 
-sources = db.selectAll('SELECT id, rss_uri AS uri FROM sources', None)
+def fetch_item_data(source_id, item):
+    return {'source_id': source_id, 'title': item.title.text, 'uri': item.link.text}
 
-for source in sources:
-    source_id = source['id']
+def get_date_formats():
+    return ['%a, %d %b %Y %H:%M:%S %z', '%a, %d %b %Y %H:%M:%S %Z', '%d %b %Y']
+
+def fetch_active_sources():
+    '''Fetches only the sources which have subscriptions'''
+    query = '''
+            SELECT sources.id, sources.latestlink_fetched, sources.rss_uri AS uri
+            FROM sources
+            WHERE (SELECT COUNT(*) FROM subscriptions WHERE source_id = sources.id) > 0
+            '''
+    return db.selectAll(query, None)
+
+def fetch_feed_tree(source):
     req = request.Request(source['uri'], None, user_agent())
-
     response = request.urlopen(req)
     page = response.read()
 
-    tree = BeautifulSoup(page, 'xml')
+    return BeautifulSoup(page, 'xml')
+
+def get_article_date(item):
+    accepted_date_formats = get_date_formats()
+    date = datetime.now()
+
+    if item.pubDate is not None:
+        for date_format in accepted_date_formats:
+            try:
+                piece['published_at'] = datetime.strptime(item.pubDate.text, date_format)
+                break
+            except ValueError:
+                continue
+    return date
+
+def get_article_body(item):
+    content = item.content or item.summary or item.description
+
+    if content is not None:
+        content = "%s %s" % (piece['title'], content.text)
+    else:
+        content = piece['title']
+    return content
+
+sources = fetch_active_sources()
+articles_fetched = 0
+
+for source in sources:
+    print('Fetching news for %s...' % source['uri'])
+
+    source_id = source['id']
+    latestlink_fetched = source.get('latestlink_fetched')
+    index_link = None
+
+    tree = fetch_feed_tree(source)
     items = tree.findAll('item')
 
-    accepted_date_formats = ['%a, %d %b %Y %H:%M:%S %z', '%a, %d %b %Y %H:%M:%S %Z', '%d %b %Y']
-
     for item in items:
-        piece = {
-            'source_id': source_id,
-            'title': item.title.text,
-            'uri': item.link.text
-        }
+        if index_link is None:
+            index_link = item.link.text
 
-        article_content = item.content or item.summary or item.description
+        if latestlink_fetched == index_link:
+            break
+        articles_fetched += 1
 
-        if article_content is not None:
-            article_content = "%s %s" % (piece['title'], article_content.text)
-        else:
-            article_content = piece['title']
-        piece['category'] = classify(article_content)
+        piece = fetch_item_data(source_id, item)
+        content = get_article_body(item)
+        piece['category'] = classify(content)
 
-        if item.pubDate is not None:
-            for date_format in accepted_date_formats:
-                try:
-                    piece['published_at'] = datetime.strptime(item.pubDate.text, date_format)
-                    break
-                except ValueError:
-                    continue
-
-        if piece.get('published_at') is None:
-            piece['published_at'] = datetime.now()
-
+        piece['published_at'] = get_article_date(item)
         piece['published_at'] = piece['published_at'].strftime('%Y-%m-%d %H:%M')
-        news_found = db.selectAll('SELECT id FROM articles WHERE uri = %s', piece['uri'])
 
-        if len(news_found) == 0:
-            db.insert('articles', piece)
+        db.insert('articles', piece)
+    db.query('UPDATE sources SET latestlink_fetched = %s WHERE id = %s', (index_link, source_id))
+
+print('Articles fetched: %d' % articles_fetched)

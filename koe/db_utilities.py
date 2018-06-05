@@ -9,6 +9,11 @@ class DB(object):
         self.cursor.execute(query, parameters)
         return self.cursor.fetchall()
     
+    def query(self, query, parameters):
+        '''Execute a general query which returns rows'''
+        self.cursor.execute(query, parameters)
+        return self.cursor
+    
     def insert(self, table, columns):
         '''Executes an insert and returns the inserted rows'''
         column_names = ','.join([column for column in columns])

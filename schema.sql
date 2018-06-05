@@ -15,6 +15,7 @@ CREATE TABLE sources (
   title TEXT NOT NULL,
   rss_uri TEXT NOT NULL,
   icon_path TEXT NOT NULL,
+  latestlink_fetched TEXT NULL,
   created_at TIMESTAMP NOT NULL,
 
   UNIQUE(uri)
