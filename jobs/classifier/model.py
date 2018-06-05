@@ -1,4 +1,4 @@
-from .utilities import clean_str
+from utilities import clean_str
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from textblob import Word
@@ -15,12 +15,14 @@ categories = data['category'].tolist()
 
 for index, value in enumerate(news):
     news[index] = ' '.join([Word(word).lemmatize() for word in clean_str(value).split()])
+    print('Read news n.%s' % (index))
 
 vectorizer = TfidfVectorizer(stop_words='english', min_df=2)
 features = vectorizer.fit_transform(news)
 labels = np.array(categories)
 joblib.dump(vectorizer, 'vectorizer.pkl')
 
-model = RandomForestClassifier(n_estimators=300, max_depth=150, n_jobs=1)
+print('Fitting the model..')
+model = RandomForestClassifier(n_estimators=300, max_depth=150, n_jobs=-1)
 model.fit(features, labels)
 joblib.dump(model, 'model.pkl')

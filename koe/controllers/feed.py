@@ -20,19 +20,33 @@ class FeedController(Controller):
         source_id = self.__create_source_unless_exists(rss)
         return self.__attach_feed_to_user(source_id)
     
-    def get_news_by_source(self, source_id):
+    def get_news(self):
         '''Fetches all the news of a specific source'''
         user_id = self.session['user_id'] or 0
+        source_id = request.args.get('source_id')
+        category = request.args.get('category')
+        params = [user_id]
+
         query = '''
                 SELECT articles.*, sources.icon_path, sources.id AS origin_id,
                 sources.uri AS origin_uri, sources.title AS origin_title
                 FROM sources, subscriptions, articles
                 WHERE sources.id = subscriptions.source_id AND user_id = %s
                 AND articles.source_id = subscriptions.source_id
-                AND articles.source_id = %s
-                ORDER BY published_at DESC LIMIT 20
+                
                 '''
-        news = self.database.selectAll(query, (user_id, source_id))
+
+        if source_id is not None:
+            query += ' AND articles.source_id = %s'
+            params.append(source_id)
+        
+        if category is not None:
+            query += ' AND articles.category = %s'
+            params.append(category)
+
+        query += 'ORDER BY published_at DESC LIMIT 20'
+
+        news = self.database.selectAll(query, tuple(params))
         return dumps(news, default=str)
 
     def __attach_feed_to_user(self, source_id):

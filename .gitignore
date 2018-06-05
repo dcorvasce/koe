@@ -112,3 +112,6 @@ node_modules
 # public assets
 static/app.*
 static/style.*
+
+# prediction model
+model.pkl

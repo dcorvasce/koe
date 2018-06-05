@@ -23,10 +23,10 @@ def new_source():
     controller = FeedController(conn, session)
     return controller.create()
 
-@app.route('/news/<source>')
-def news_by_source(source):
+@app.route('/news')
+def news():
     controller = FeedController(conn, session)
-    return controller.get_news_by_source(source)
+    return controller.get_news()
 
 @app.route('/signup')
 def new_user():

@@ -67,8 +67,20 @@
 
     <div class="container feed">
       <section class="row">
-        <header>
+        <header class="main-header">
           <h2 class="is-large"><i class="fas fa-rss-square"></i> Feed</h2>
+          <form class="inline-form category-filter">
+              <select name="category">
+                <option value="all" selected>All categories</option>
+                <option value="business">Business</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="politics">Politics</option>
+                <option value="tech">Tech</option>
+                <option value="health">Health</option>
+                <option value="world">World</option>
+                <option value="us">US</option>
+              </select>
+            </form>
         </header>
       </section>
       <section class="row news">
