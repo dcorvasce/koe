@@ -4,5 +4,27 @@
     "start_url": "/",
     "display": "fullscreen",
     "theme_color": "#222",
-    "background_color": "#f8f8f8"
+    "background_color": "#f8f8f8",
+    "icons": [
+        {
+            "src": "launcher-icon-1x.webp",
+            "type": "image/webp",
+            "sizes": "48x48"
+        },
+        {
+            "src": "launcher-icon-2x.webp",
+            "type": "image/webp",
+            "sizes": "96x96"
+        },
+        {
+            "src": "launcher-icon-4x.webp",
+            "type": "image/webp",
+            "sizes": "192x192"
+        },
+        {
+            "src": "launcher-icon-6x.webp",
+            "type": "image/webp",
+            "sizes": "512x512"
+        }
+    ]
 }
