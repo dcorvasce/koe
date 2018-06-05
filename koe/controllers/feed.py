@@ -67,8 +67,12 @@ class FeedController(Controller):
                 'title': rss['title'],
                 'uri': rss['origin'],
                 'rss_uri': rss['uri'],
-                'icon_path': rss['icon_path'],
+                'icon_path': rss.get('icon_path'),
                 'latestlink_fetched': 'na'
             }
+
+            if record['icon_path'] in ['', None]:
+                record['icon_path'] = '/static/missing-source-logo.png'
+
             return self.database.insert('sources', record)
         return sources[0]['id']
