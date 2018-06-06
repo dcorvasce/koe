@@ -176,4 +176,22 @@
             }
         });
     }
+
+    const sources = document.querySelectorAll('a[data-action="delete-source"]');
+
+    sources.forEach((source) => {
+        source.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            const sourceId = ev.target.getAttribute('data-source-id');
+
+            console.log(sourceId);
+            console.log(parent);
+            fetch(`/subscriptions/${sourceId}`, {
+                method: 'DELETE',
+                credentials: 'same-origin',
+            }).then((response) => {
+                location.reload();
+            });
+        });
+    });
 })();

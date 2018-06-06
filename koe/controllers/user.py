@@ -1,6 +1,14 @@
 from .controller import *
 
 class UserController(Controller):
+    def unsubscribe(self, source_id):
+        '''Unsubscribe the current user from a source'''
+        user_id = self.session.get('user_id') or 0
+        statement = 'DELETE FROM subscriptions WHERE user_id = %s AND source_id = %s'
+
+        self.database.query(statement, (user_id, source_id))
+        return dumps({'ok': True})
+
     def get_user_news(self):
         '''Fetches all the news the current user is subscribed to'''
         user_id = self.session.get('user_id') or 0

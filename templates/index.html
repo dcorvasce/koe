@@ -62,6 +62,8 @@
             <ficaption>
               <a href="{{ source['uri'] }}" target="_blank">{{ source.title }}</a>
             </figcaption>
+
+            <a data-source-id="{{ source['id'] }}" data-action="delete-source">&times;</i></a>
           </figure>
         {% endfor %}
       </section>

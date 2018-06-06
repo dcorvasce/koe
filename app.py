@@ -23,6 +23,11 @@ def new_source():
     controller = FeedController(conn, session)
     return controller.create()
 
+@app.route('/subscriptions/<int:source_id>', methods=['DELETE'])
+def unsubscribe(source_id):
+    controller = UserController(conn, session)
+    return controller.unsubscribe(source_id)
+
 @app.route('/news')
 def news():
     controller = FeedController(conn, session)

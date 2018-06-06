@@ -4,6 +4,8 @@
   --category-background-color: #333;
   --category-foreground-color: #f8f8f8;
   --date-foreground-color: #444;
+  --delete-button-color: #fd7e14;
+  --delete-button-hover-color: #e8590c;
 }
 
 .news-article {
@@ -69,5 +71,33 @@
     border: 1px solid transparent;
     margin-right: 10px;
     border-radius: 5px;
+  }
+
+  & a[data-action="delete-source"] {
+    width: 48px;
+    height: 48px;
+    background-color: var(--delete-button-color);
+    display: none;
+    border: 1px solid transparent;
+    border-radius: 48px;
+    color: var(--background-color);
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    padding: 0 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-left: 5px;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: var(--delete-button-hover-color);
+      transition: 0.3s ease-out background-color;
+    }
+  }
+
+  &:hover a[data-action="delete-source"] {
+    display: initial;
   }
 }
