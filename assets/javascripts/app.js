@@ -91,10 +91,12 @@
                 response
                     .json()
                     .then((news) => {
-                        console.log(news)
                         newsContainer.innerHTML = '';
 
                         news.forEach((piece) => {
+                            piece['active'] = piece['starred'] == 1 ? 'active' : '';
+                            piece['fav-label'] = piece['starred'] == 0 ? 'Add to favourites' : 'Starred';
+
                             const keys = Object.keys(piece);
                             let article = template;
 
@@ -139,10 +141,12 @@
                 response
                     .json()
                     .then((news) => {
-                        console.log(news)
                         newsContainer.innerHTML = '';
 
                         news.forEach((piece) => {
+                            piece['active'] = piece['starred'] == 1 ? 'active' : '';
+                            piece['fav-label'] = piece['starred'] == 0 ? 'Add to favourites' : 'Starred';
+
                             const keys = Object.keys(piece);
                             let article = template;
 
@@ -191,6 +195,29 @@
                 credentials: 'same-origin',
             }).then((response) => {
                 location.reload();
+            });
+        });
+    });
+
+    const favourites = document.querySelectorAll('[data-action="add-favourite"]');
+
+    favourites.forEach((favourite) => {
+        favourite.addEventListener('click', (ev) => {
+            const target = ev.target;
+            const targetLabel = target.querySelector('span');
+            const articleId = target.getAttribute('data-article-id');
+
+            target.classList.toggle('active');
+
+            if (targetLabel.innerText === 'Add to favourites') {
+                targetLabel.innerText = 'Starred';
+            } else {
+                targetLabel.innerText = 'Add to favourites';
+            }
+
+            fetch(`/favourites/${articleId}`, {
+                method: 'POST',
+                credentials: 'same-origin'
             });
         });
     });

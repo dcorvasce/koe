@@ -29,11 +29,14 @@ class FeedController(Controller):
 
         query = '''
                 SELECT articles.*, sources.icon_path, sources.id AS origin_id,
-                sources.uri AS origin_uri, sources.title AS origin_title
+                sources.uri AS origin_uri, sources.title AS origin_title,
+                IF((
+                    SELECT COUNT(*) FROM user_favouritearticles
+                    WHERE user_favouritearticles.user_id = subscriptions.user_id
+                    AND article_id = articles.id) > 0, 1, 0) AS starred
                 FROM sources, subscriptions, articles
                 WHERE sources.id = subscriptions.source_id AND user_id = %s
                 AND articles.source_id = subscriptions.source_id
-                
                 '''
 
         if source_id is not None:

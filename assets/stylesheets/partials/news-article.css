@@ -14,7 +14,25 @@
   border-radius: 3px;
   padding: 20px 40px;
   box-sizing: border-box;
-  margin: 20px 0;
+  margin: 0 0 20px 0;
+  position: relative;
+
+  & button[data-action="add-favourite"] {
+    background: none;
+    border: 1px solid transparent;
+    color: #999;
+    margin: 0;
+    padding: 0;
+    
+    & svg {
+      background-color: none;
+    }
+
+    &:hover,
+    &.active {
+      color: var(--delete-button-color);
+    }
+  }
 
   & .news-article__content {
     padding: 20px 0;

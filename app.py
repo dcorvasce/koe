@@ -28,6 +28,11 @@ def unsubscribe(source_id):
     controller = UserController(conn, session)
     return controller.unsubscribe(source_id)
 
+@app.route('/favourites/<int:article_id>', methods=['POST'])
+def toggle_favourite_article(article_id):
+    controller = UserController(conn, session)
+    return controller.toggle_favourite_article(article_id)
+
 @app.route('/news')
 def news():
     controller = FeedController(conn, session)

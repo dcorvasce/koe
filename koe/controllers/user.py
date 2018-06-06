@@ -8,15 +8,34 @@ class UserController(Controller):
 
         self.database.query(statement, (user_id, source_id))
         return dumps({'ok': True})
+    
+    def toggle_favourite_article(self, article_id):
+        '''Mark an article as favourite or remove it as one'''
+        user_id = self.session.get('user_id') or 0
+        params = (user_id, article_id)
+
+        statement = 'SELECT id FROM user_favouritearticles WHERE user_id = %s AND article_id = %s'
+        favourites = self.database.selectAll(statement, params)
+
+        if len(favourites) == 0:
+            self.database.insert('user_favouritearticles', {'user_id': user_id, 'article_id': article_id})
+        else:
+            statement = 'DELETE FROM user_favouritearticles WHERE user_id = %s AND article_id = %s'
+            self.database.query(statement, params)
+        return dumps({'ok': True})
 
     def get_user_news(self):
         '''Fetches all the news the current user is subscribed to'''
         user_id = self.session.get('user_id') or 0
         query = '''
                 SELECT articles.*, sources.icon_path, sources.id AS origin_id,
-                sources.uri AS origin_uri, sources.title AS origin_title
+                sources.uri AS origin_uri, sources.title AS origin_title,
+                IF((
+                    SELECT COUNT(*) FROM user_favouritearticles
+                    WHERE user_favouritearticles.user_id = subscriptions.user_id
+                    AND article_id = articles.id) > 0, 1, 0) AS starred
                 FROM sources, subscriptions, articles
-                WHERE sources.id = subscriptions.source_id AND user_id = %s
+                WHERE sources.id = subscriptions.source_id AND subscriptions.user_id = %s
                 AND articles.source_id = subscriptions.source_id
                 ORDER BY published_at DESC LIMIT 20
                 '''
