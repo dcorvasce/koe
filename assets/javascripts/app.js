@@ -158,4 +158,22 @@
             })
         });
     }
+
+    const signOut = document.querySelector('a[data-action="sign-out"]');
+
+    if (signOut) {
+        signOut.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            const confirmation = confirm('Do you really want to sign out?');
+
+            if (confirmation) {
+                fetch('/signout', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                }).then(() => {
+                    location.reload();
+                });
+            }
+        });
+    }
 })();
