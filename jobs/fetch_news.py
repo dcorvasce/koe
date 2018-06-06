@@ -28,6 +28,7 @@ def fetch_active_sources():
             SELECT sources.id, sources.latestlink_fetched, sources.rss_uri AS uri
             FROM sources
             WHERE (SELECT COUNT(*) FROM subscriptions WHERE source_id = sources.id) > 0
+            ORDER BY sources.id DESC
             '''
     return db.selectAll(query, None)
 
@@ -46,13 +47,13 @@ def get_article_date(item):
     if published_date is not None:
         for date_format in accepted_date_formats:
             try:
-                piece['published_at'] = datetime.strptime(published_date.text, date_format)
+                date = datetime.strptime(published_date.text, date_format)
                 break
             except ValueError:
                 continue
     return date
 
-def get_article_body(item):
+def get_article_body(item, piece):
     content = item.content or item.summary or item.description
 
     if content is not None:
@@ -61,37 +62,41 @@ def get_article_body(item):
         content = piece['title']
     return content
 
-sources = fetch_active_sources()
-articles_fetched = 0
+def fetch_news():
+    sources = fetch_active_sources()
+    articles_fetched = 0
 
-for source in sources:
-    print('Fetching news for %s...' % source['uri'])
+    for source in sources:
+        print('Fetching news for %s...' % source['uri'])
 
-    source_id = source['id']
-    latestlink_fetched = source.get('latestlink_fetched')
-    index_link = None
+        source_id = source['id']
+        latestlink_fetched = source.get('latestlink_fetched')
+        index_link = None
 
-    tree = fetch_feed_tree(source)
-    items = tree.findAll('item') or tree.findAll('entry')
+        tree = fetch_feed_tree(source)
+        items = tree.findAll('item') or tree.findAll('entry')
 
-    for item in items:
-        if index_link is None:
-            index_link = item.link.text
+        for item in items:
+            if index_link is None:
+                index_link = item.link.text
 
-        if latestlink_fetched == index_link:
-            break
-        articles_fetched += 1
+            if latestlink_fetched == index_link:
+                break
+            articles_fetched += 1
 
-        piece = fetch_item_data(source_id, item)
-        content = get_article_body(item)
-        piece['category'] = classify(content)
+            piece = fetch_item_data(source_id, item)
+            content = get_article_body(item, piece)
+            piece['category'] = classify(content)
 
-        piece['published_at'] = get_article_date(item)
-        piece['published_at'] = piece['published_at'].strftime('%Y-%m-%d %H:%M')
+            piece['published_at'] = get_article_date(item)
+            piece['published_at'] = piece['published_at'].strftime('%Y-%m-%d %H:%M')
 
-        db.insert('articles', piece)
-    try:
-        db.query('UPDATE sources SET latestlink_fetched = %s WHERE id = %s', (index_link, source_id))
-    except Exception:
-        print('An error occured, unable to save the items')
-print('Articles fetched: %d' % articles_fetched)
+            db.insert('articles', piece)
+        try:
+            db.query('UPDATE sources SET latestlink_fetched = %s WHERE id = %s', (index_link, source_id))
+        except Exception:
+            print('An error occured, unable to save the items')
+    print('Articles fetched: %d' % articles_fetched)
+
+if __name__ == '__main__':
+    fetch_news()
