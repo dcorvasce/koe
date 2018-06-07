@@ -4,6 +4,9 @@
   --foreground-color: #333;
   --lightest-color: #fff;
   --border-color: #d7d7d7;
+  --button-background-color: #444;
+  --button-foreground-color: #f8f8f8;
+  --button-hover-background-color: #222;
 }
 
 html, body {
@@ -85,4 +88,28 @@ a {
   .container.is-fixed {
     flex-wrap: wrap;
   }
+}
+
+.btn {
+  background-color: var(--button-background-color);
+  color: var(--button-foreground-color);
+  border: 1px solid transparent;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 3px;
+  border-radius: 200px;
+  padding: 10px 20px;
+  transition: 0.3s ease-in background-color;
+  cursor: pointer;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: var(--button-hover-background-color);
+    transition: 0.3s ease-out background-color;
+  }
+}
+
+.hidden {
+  display: none;
 }

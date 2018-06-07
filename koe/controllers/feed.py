@@ -25,6 +25,7 @@ class FeedController(Controller):
         user_id = self.session['user_id'] or 0
         source_id = request.args.get('source_id')
         category = request.args.get('category')
+        page = request.args.get('page') or 0
         params = [user_id]
 
         query = '''
@@ -47,7 +48,9 @@ class FeedController(Controller):
             query += ' AND articles.category = %s'
             params.append(category)
 
-        query += 'ORDER BY published_at DESC LIMIT 20'
+        query += 'ORDER BY published_at DESC LIMIT %s,10'
+        offset = int(page) * 10
+        params.append(offset)
 
         news = self.database.selectAll(query, tuple(params))
         return dumps(news, default=str)

@@ -17,8 +17,6 @@ const pagingListeners = require('./event_listeners/paging');
     authListeners.addSignFormListener();
     authListeners.addSignOutListener();
 
-    pagingListeners.addNextPageListener();
-    pagingListeners.addPreviousPageListener();
-
+    newsListeners.addMoreNewsListener();
     newsListeners.attachFavouritesListeners();
 })();

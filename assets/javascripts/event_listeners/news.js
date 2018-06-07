@@ -1,5 +1,7 @@
-const loadNews = (news, container, template) => {
-    container.innerHTML = '';
+const loadNews = (news, container, template, reset) => {
+    if (reset) {
+        container.innerHTML = '';
+    }
 
     news.forEach((piece) => {
         piece['active'] = piece['starred'] == 1 ? 'active' : '';
@@ -50,6 +52,10 @@ module.exports = {
             sourceFilter.addEventListener('change', (ev) => {
                 ev.preventDefault();
 
+                const moreButton = document.querySelector('[data-action="more-news"]');
+                moreButton.classList.remove('hidden');
+                moreButton.setAttribute('data-page', 1);
+
                 const form = ev.target;
                 const sourceId = form.querySelector('select[name="source_id"] option:checked').value;
                 const category = document.querySelector('select[name="category"] option:checked').value;
@@ -73,7 +79,7 @@ module.exports = {
                     response
                         .json()
                         .then((news) => {
-                            loadNews(news, newsContainer, template);
+                            loadNews(news, newsContainer, template, true);
                             attachFavouritesListeners();
                         });
                 }).catch((error) => {
@@ -87,6 +93,10 @@ module.exports = {
             categoryFilter.addEventListener('submit', (ev) => ev.preventDefault);
             categoryFilter.addEventListener('change', (ev) => {
                 ev.preventDefault();
+
+                const moreButton = document.querySelector('[data-action="more-news"]');
+                moreButton.classList.remove('hidden');
+                moreButton.setAttribute('data-page', 1);
         
                 const form = ev.target;
                 const sourceId = document.querySelector('select[name="source_id"] option:checked').value;
@@ -112,12 +122,58 @@ module.exports = {
                     response
                         .json()
                         .then((news) => {
-                            loadNews(news, newsContainer, template);
+                            loadNews(news, newsContainer, template, true);
                             attachFavouritesListeners();
                         });
                 }).catch((error) => {
                     console.log(error);
                 })
+            });
+        }
+    },
+    addMoreNewsListener: () => {
+        const moreButton = document.querySelector('[data-action="more-news"]');
+
+        if (moreButton) {
+            moreButton.addEventListener('click', (ev) => {
+                ev.preventDefault();
+
+                const template = document.querySelector('#article-template').innerHTML;
+                const newsContainer = document.querySelector('.news');
+
+                const page = ev.target.getAttribute('data-page') || 1;
+                const sourceId = document.querySelector('[name="source_id"] option:checked').value;
+                const category = document.querySelector('[name="category"] option:checked').value;
+
+                let params = `page=${page}`;
+
+                if (category !== 'all') {
+                    params += `&category=${category}`;
+                }
+        
+                if (parseInt(sourceId) !== 0) {
+                    params += `&source_id=${sourceId}`;
+                }
+
+                fetch(`/news?${params}`, {
+                    method: 'GET',
+                    credentials: 'same-origin',
+                }).then((response) => {
+                    response
+                        .json()
+                        .then((news) => {
+                            if (news.length == 0) {
+                                ev.target.classList.add('hidden');
+                            } else {
+                                ev.target.setAttribute('data-page', parseInt(page) + 1);
+                            }
+
+                            loadNews(news, newsContainer, template, false);
+                            attachFavouritesListeners();
+                        });
+                }).catch((error) => {
+                    console.log(error);
+                });
             });
         }
     },
