@@ -2,6 +2,8 @@
 
 A **news reader** wrote in Flask which use _machine learning_ to classify articles.
 
+![Koe Dashboard](SCREENSHOT.png)
+
 ## What is it
 
 This is my final exams' project which demonstrates how machine learning could be used
