@@ -43,14 +43,14 @@
       color: inherit;
       text-decoration: none !important;
     }
-    
+
     & .navbar__nav {
       list-style-type: none;
       display: flex;
       justify-content: flex-end;
       flex-grow: 1;
     }
-    
+
     & .navbar__nav li {
       margin: 0 20px;
 

@@ -22,7 +22,7 @@
     box-sizing: border-box;
     font-family: inherit;
   }
-  
+
   & input[type="submit"] {
     background-color: var(--button-background-color);
     color: var(--button-foreground-color);
@@ -52,8 +52,13 @@
     border: 1px solid #e7e7e7;
     border-radius: 200px;
     font-family: inherit;
+
+    @media only screen and (max-width: 480px) {
+      width: 90%;
+      margin: 0 5%;
+    }
   }
-  
+
   & button {
     min-width: 100px;
     margin-left: 10px;
@@ -63,9 +68,17 @@
     border: 1px solid transparent;
     font-size: 0.9em;
     border-radius: 200px;
+
     transition: 0.3s ease-in background-color;
     font-weight: bold;
-  
+
+    @media only screen and (max-width: 480px) {
+      width: 90% !important;
+      margin: 10px 5% 0 5%;
+      box-sizing: border-box;
+      padding: 10px 20px;
+    }
+
     &:hover,
     &:focus,
     &:active {
@@ -73,11 +86,21 @@
       transition: 0.3s ease-out background-color;
     }
   }
+
+  @media only screen and (max-width: 480px) {
+    flex-direction: column;
+    box-sizing: border-box;
+  }
 }
 
 .source-form {
   width: 70%;
   margin: 0 15%;
+
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+    margin: 0;
+  }
 }
 
 .form-group {
@@ -91,7 +114,7 @@
     width: 100%;
     display: flex;
   }
-  
+
   & label {
     font-weight: bold;
     font-family: inherit;
@@ -113,7 +136,7 @@
   color: #ff4236;
   font-weight: bold;
   padding: 10px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   font-size: 0.9em;
 }
 
