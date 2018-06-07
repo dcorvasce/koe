@@ -101,3 +101,6 @@ def show_external_profile(email):
     '''Return the profile page of one of the registered users'''
     controller = UserController(conn, session)
     return controller.show_external_profile(email)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
