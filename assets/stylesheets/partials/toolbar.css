@@ -28,7 +28,7 @@ select {
   border: 1px solid #e7e7e7;
   border-radius: 200px;
 
-  @media only screen and (max-width: 480px) {
+  @media only screen and (max-width: 960px) {
     width: 90%;
     margin: 0 5%;
   }

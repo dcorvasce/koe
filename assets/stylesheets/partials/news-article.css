@@ -18,6 +18,11 @@
   margin: 0 0 20px 0;
   position: relative;
 
+  @media only screen and (max-width: 768px) {
+    width: 90%;
+    margin: 0 5% 20px 5%;
+  }
+
   & button[data-action="add-favourite"] {
     background: none;
     border: 1px solid transparent;

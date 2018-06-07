@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="theme-color" content="#333">
 
-  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
   <link rel="shortcut icon" href="/static/icon.png">
@@ -33,7 +33,7 @@
         <input type="url" name="url" autocomplete="off" placeholder="https://rubyweekly.com" required>
         <button type="submit"><i class="fas fa-plus-circle"></i> Follow</button>
       </form>
-      
+
       <form class="inline-form source-filter">
         <select name="source_id">
           <option value="0" selected>All sources</option>
@@ -58,7 +58,7 @@
         {% for source in sources %}
           <figure class="news-article__source">
             <img src="{{ source['icon_path'] }}" alt="{{ source['title'] }}" aria-hidden="true">
-    
+
             <ficaption>
               <a href="{{ source['uri'] }}" target="_blank">{{ source.title }}</a>
             </figcaption>
@@ -75,7 +75,7 @@
           <h2 class="is-large"><i class="fas fa-rss-square"></i> Feed</h2>
           <form class="inline-form category-filter">
             <select name="category">
-              <option value="all" selected>Filter by category</option>
+              <option value="all" selected>All categories</option>
               <option value="business">Business</option>
               <option value="entertainment">Entertainment</option>
               <option value="politics">Politics</option>
