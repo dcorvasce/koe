@@ -7,7 +7,10 @@ import pymysql
 app = Flask(__name__)
 start_session(app)
 
-# Routes
+@app.route('/page-not-found')
+def page_not_found():
+    return render_template('404.html')
+
 @app.route('/')
 def index():
     if session.get('user_id') is not None:
@@ -67,3 +70,8 @@ def sign_out():
 def show_profile():
     controller = UserController(conn, session)
     return controller.show_profile()
+
+@app.route('/profile/<string:email>', methods=['GET'])
+def show_external_profile(email):
+    controller = UserController(conn, session)
+    return controller.show_external_profile(email)

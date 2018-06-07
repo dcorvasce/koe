@@ -42,9 +42,9 @@ class UserController(Controller):
         
         return self.database.selectAll(query, user_id)
 
-    def get_user_feeds(self):
+    def get_user_feeds(self, user_id=None):
         '''Fetches all the feeds the current user is subscribed to'''
-        user_id = self.session['user_id'] or 0
+        user_id = user_id or self.session['user_id'] or 0
         query = '''
                 SELECT sources.* FROM sources JOIN subscriptions
                 ON sources.id = subscriptions.source_id AND user_id = %s
@@ -52,9 +52,9 @@ class UserController(Controller):
 
         return self.database.selectAll(query, user_id)
     
-    def get_user_favourite_articles(self):
+    def get_user_favourite_articles(self, user_id=None):
         '''Fetches all the user's favourite articles'''
-        user_id = self.session['user_id'] or 0
+        user_id = user_id or self.session['user_id'] or 0
         query = '''
                 SELECT articles.*, sources.icon_path, sources.id AS origin_id,
                 sources.uri AS origin_uri, sources.title AS origin_title
@@ -68,9 +68,9 @@ class UserController(Controller):
                 '''
         return self.database.selectAll(query, user_id)
 
-    def show_profile(self):
+    def show_profile(self, user_id=None):
         '''Show user profile page'''
-        user_id = self.session.get('user_id')
+        user_id = user_id or self.session.get('user_id')
         if user_id is None:
             return redirect('/')
         
@@ -81,7 +81,16 @@ class UserController(Controller):
         rows = self.database.selectAll(query, user_id)
         user = rows[0]
 
-        favourites = self.get_user_favourite_articles()
-        sources = self.get_user_feeds()
-        return render_template('users/profile.html', user=user,
+        favourites = self.get_user_favourite_articles(user_id)
+        sources = self.get_user_feeds(user_id)
+        return render_template('users/profile.html', external=user_id != self.session.get('user_id'),
+                                                     user=user,
                                                      favourites=favourites, sources=sources)
+
+    def show_external_profile(self, email):
+        '''Show external user profile page'''
+        rows = self.database.selectAll('SELECT id FROM users WHERE email = %s', email)
+
+        if len(rows) == 1:
+            return self.show_profile(rows[0]['id'])
+        return redirect('/')

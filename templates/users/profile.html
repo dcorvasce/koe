@@ -12,7 +12,7 @@
   <link rel="shortcut icon" href="/static/icon.png">
   <link rel="manifest" href="/static/manifest.json">
 
-  <title>Your Profile &mdash; Koe</title>
+  <title>{{ user['first_name'] }} {{ user['last_name'] }} &mdash; Koe</title>
 </head>
 <body>
   <nav class="navbar">
@@ -22,7 +22,12 @@
       </header>
       <ul class="navbar__nav">
         <li><a href="/">Feed</a></li>
-        <li><a class="active">Profile</a></li>
+        {% if external == False %}
+          <li><a class="active">Profile</a></li>
+        {% else %}
+          <li><a href="/profile">Profile</a></li>
+        {% endif %}
+
         <li><a href="#" data-action="sign-out">Sign out</a></li>
       </ul>
     </section>
@@ -31,7 +36,7 @@
   <div class="container is-fixed">
       <section class="row">
           <header class="profile-header">
-              <h2 class="is-large">Welcome, {{ user['first_name'] }} {{ user['last_name'] }}</h2>
+              <h2 class="is-large">{{ user['first_name'] }} {{ user['last_name'] }}</h2>
               <p class="subtitle">Registered since {{ user['registered_since'] }}</p>
           </header>
       </section>
