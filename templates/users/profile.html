@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="theme-color" content="#333">
 
-  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
   <link rel="shortcut icon" href="/static/icon.png">
@@ -22,12 +22,6 @@
       </header>
       <ul class="navbar__nav">
         <li><a href="/">Feed</a></li>
-        {% if external == False %}
-          <li><a class="active">Profile</a></li>
-        {% else %}
-          <li><a href="/profile">Profile</a></li>
-        {% endif %}
-
         <li><a href="#" data-action="sign-out">Sign out</a></li>
       </ul>
     </section>
@@ -53,7 +47,7 @@
         {% for source in sources %}
           <figure class="news-article__source">
             <img src="{{ source['icon_path'] }}" alt="{{ source['title'] }}" aria-hidden="true">
-      
+
             <ficaption>
               <a href="{{ source['uri'] }}" target="_blank">{{ source.title }}</a>
             </figcaption>
