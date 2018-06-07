@@ -1,14 +1,16 @@
-from .controller import *
+'''Manage the feeds stored on the application'''
 from koe.feed_utilities import find_alternate
+from .controller import *
 
 class FeedController(Controller):
+    '''Provide methods to manage feeds'''
     def create(self):
         '''Register a new feed source for the current user'''
         source_uri = request.args.get('url')
 
         if source_uri is None:
             return dumps({'error': 'Missing source URL'})
-    
+
         rss = find_alternate(source_uri)
 
         if rss is None:
@@ -19,7 +21,8 @@ class FeedController(Controller):
 
         source_id = self.__create_source_unless_exists(rss)
         return self.__attach_feed_to_user(source_id)
-    
+
+
     def get_news(self):
         '''Fetches all the news of a specific source'''
         user_id = self.session['user_id'] or 0
@@ -43,7 +46,7 @@ class FeedController(Controller):
         if source_id is not None:
             query += ' AND articles.source_id = %s'
             params.append(source_id)
-        
+
         if category is not None:
             query += ' AND articles.category = %s'
             params.append(category)
@@ -52,23 +55,25 @@ class FeedController(Controller):
         offset = int(page) * 10
         params.append(offset)
 
-        news = self.database.selectAll(query, tuple(params))
+        news = self.database.select_all(query, tuple(params))
         return dumps(news, default=str)
+
 
     def __attach_feed_to_user(self, source_id):
         subscription = {'user_id': self.session['user_id'], 'source_id': source_id}
-        
+
         try:
             self.database.insert('subscriptions', subscription)
         except Exception:
             return dumps({'error': "You've already subscribed"})
         return dumps({'ok': True})
 
+
     def __create_source_unless_exists(self, rss):
         query = 'SELECT id FROM sources WHERE uri = %s OR rss_uri = %s'
-        sources = self.database.selectAll(query, (rss['origin'], rss['uri']))
+        sources = self.database.select_all(query, (rss['origin'], rss['uri']))
 
-        if len(sources) == 0:
+        if not sources:
             record = {
                 'title': rss['title'],
                 'uri': rss['origin'],

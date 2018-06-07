@@ -1,45 +1,53 @@
-'''
+'''Fetch news for the sources the users are subscribed to.
+
 Each N minutes, for each source registered in the system
 it fetches the new articles, categorize them and store them.
 '''
 import sys
 sys.path.append('../koe')
-
-from config.database import conn
-from pymysql import cursors
-from koe.db_utilities import DB
-from classifier.classifier import classify
 from datetime import datetime
 from urllib import request
 from bs4 import BeautifulSoup
+from pymysql import cursors
+from classifier.classifier import classify
+from config.database import conn
+from koe.db_utilities import DB
 from koe.feed_utilities import user_agent
 
 db = DB(conn, conn.cursor(cursors.DictCursor))
 
 def fetch_item_data(source_id, item):
+    '''Fetch the essential information from a feed item'''
     return {'source_id': source_id, 'title': item.title.text, 'uri': item.link.text}
 
+
 def get_date_formats():
+    '''Return the most common date formats to look for during date parsing'''
     return ['%a, %d %b %Y %H:%M:%S %z', '%a, %d %b %Y %H:%M:%S %Z', '%d %b %Y']
 
+
 def fetch_active_sources():
-    '''Fetches only the sources which have subscriptions'''
+    '''Return the sources which have at least one active subscription'''
     query = '''
             SELECT DISTINCT sources.rss_uri AS uri, sources.id, sources.latestlink_fetched
             FROM sources
             WHERE (SELECT COUNT(*) FROM subscriptions WHERE source_id = sources.id) > 0
             ORDER BY sources.id DESC
             '''
-    return db.selectAll(query, None)
+    return db.select_all(query, None)
+
 
 def fetch_feed_tree(source):
+    '''Create a parseable tree by a XML document'''
     req = request.Request(source['uri'], None, user_agent())
     response = request.urlopen(req)
     page = response.read()
 
     return BeautifulSoup(page, 'xml')
 
+
 def get_article_date(item):
+    '''Return the article publishing date'''
     accepted_date_formats = get_date_formats()
     date = datetime.now()
     published_date = item.pubDate or item.published
@@ -53,7 +61,9 @@ def get_article_date(item):
                 continue
     return date
 
+
 def get_article_body(item, piece):
+    '''Return the article content available in the feed'''
     content = item.content or item.summary or item.description
 
     if content is not None:
@@ -62,15 +72,19 @@ def get_article_body(item, piece):
         content = piece['title']
     return content
 
+
 def article_exists(item):
+    '''Given a feed item, check if it was already parsed'''
     uri = item.link.text
-    articles = db.selectAll('SELECT * FROM articles WHERE uri = %s', uri)
+    articles = db.select_all('SELECT * FROM articles WHERE uri = %s', uri)
 
     return len(articles) > 0
 
+
 def fetch_news():
+    '''Fetch news for the active sources'''
     sources = fetch_active_sources()
-    MAX_ARTICLES_PER_SOURCE = 30
+    articles_per_source = 30
 
     for source in sources:
         articles_fetched = 0
@@ -90,7 +104,7 @@ def fetch_news():
             if index_link is None:
                 index_link = item.link.text
 
-            if latestlink_fetched == index_link or articles_fetched == MAX_ARTICLES_PER_SOURCE:
+            if latestlink_fetched == index_link or articles_fetched == articles_per_source:
                 break
             articles_fetched += 1
 
@@ -103,9 +117,11 @@ def fetch_news():
 
             db.insert('articles', piece)
         try:
-            db.query('UPDATE sources SET latestlink_fetched = %s WHERE id = %s', (index_link, source_id))
+            query = 'UPDATE sources SET latestlink_fetched = %s WHERE id = %s'
+            db.query(query, (index_link, source_id))
         except Exception:
             print('An error occured, unable to save the items')
+
 
 if __name__ == '__main__':
     fetch_news()

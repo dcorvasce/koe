@@ -1,6 +1,8 @@
+'''Manage users across the application'''
 from .controller import *
 
 class UserController(Controller):
+    '''Provide methods to manage users and their resources'''
     def unsubscribe(self, source_id):
         '''Unsubscribe the current user from a source'''
         user_id = self.session.get('user_id') or 0
@@ -8,21 +10,24 @@ class UserController(Controller):
 
         self.database.query(statement, (user_id, source_id))
         return dumps({'ok': True})
-    
+
+
     def toggle_favourite_article(self, article_id):
         '''Mark an article as favourite or remove it as one'''
         user_id = self.session.get('user_id') or 0
         params = (user_id, article_id)
 
         statement = 'SELECT id FROM user_favouritearticles WHERE user_id = %s AND article_id = %s'
-        favourites = self.database.selectAll(statement, params)
+        favourites = self.database.select_all(statement, params)
 
-        if len(favourites) == 0:
-            self.database.insert('user_favouritearticles', {'user_id': user_id, 'article_id': article_id})
+        if not favourites:
+            record = {'user_id': user_id, 'article_id': article_id}
+            self.database.insert('user_favouritearticles', record)
         else:
             statement = 'DELETE FROM user_favouritearticles WHERE user_id = %s AND article_id = %s'
             self.database.query(statement, params)
         return dumps({'ok': True})
+
 
     def get_user_news(self):
         '''Fetches all the news the current user is subscribed to'''
@@ -39,8 +44,9 @@ class UserController(Controller):
                 AND articles.source_id = subscriptions.source_id
                 ORDER BY published_at DESC LIMIT 20
                 '''
-        
-        return self.database.selectAll(query, user_id)
+
+        return self.database.select_all(query, user_id)
+
 
     def get_user_feeds(self, user_id=None):
         '''Fetches all the feeds the current user is subscribed to'''
@@ -50,8 +56,9 @@ class UserController(Controller):
                 ON sources.id = subscriptions.source_id AND user_id = %s
                 '''
 
-        return self.database.selectAll(query, user_id)
-    
+        return self.database.select_all(query, user_id)
+
+
     def get_user_favourite_articles(self, user_id=None):
         '''Fetches all the user's favourite articles'''
         user_id = user_id or self.session['user_id'] or 0
@@ -66,31 +73,33 @@ class UserController(Controller):
                 AND user_favouritearticles.user_id = %s
                 ORDER BY user_favouritearticles.created_at DESC LIMIT 20
                 '''
-        return self.database.selectAll(query, user_id)
+        return self.database.select_all(query, user_id)
+
 
     def show_profile(self, user_id=None):
         '''Show user profile page'''
         user_id = user_id or self.session.get('user_id')
         if user_id is None:
             return redirect('/')
-        
+
         query = '''
                 SELECT *, DATE_FORMAT(created_at, '%%d %%b %%Y') AS registered_since
                 FROM users WHERE id = %s
                 '''
-        rows = self.database.selectAll(query, user_id)
+        rows = self.database.select_all(query, user_id)
         user = rows[0]
 
         favourites = self.get_user_favourite_articles(user_id)
         sources = self.get_user_feeds(user_id)
-        return render_template('users/profile.html', external=user_id != self.session.get('user_id'),
-                                                     user=user,
-                                                     favourites=favourites, sources=sources)
+        return render_template('users/profile.html',
+                               external=user_id != self.session.get('user_id'),
+                               user=user, favourites=favourites, sources=sources)
+
 
     def show_external_profile(self, email):
         '''Show external user profile page'''
-        rows = self.database.selectAll('SELECT id FROM users WHERE email = %s', email)
+        users = self.database.select_all('SELECT id FROM users WHERE email = %s', email)
 
-        if len(rows) == 1:
-            return self.show_profile(rows[0]['id'])
-        return redirect('/')
+        if not users:
+            return redirect('/')
+        return self.show_profile(users[0]['id'])

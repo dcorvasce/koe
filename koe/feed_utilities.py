@@ -1,12 +1,17 @@
-import bs4
+'''Provide utility functions to manage feeds'''
 from urllib import request, error
+import bs4
 
 def user_agent():
-    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
-    return {'User-Agent': user_agent}
+    '''Return a fake user agent for HTTP requests'''
+    agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; \
+             rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+    return {'User-Agent': agent}
+
 
 def find_alternate(url):
-    '''Given a website, fetch data about its RSS version.
+    '''Given a website, fetch data about its RSS version
+
     It looks for a 'link' element which has a type of "application/rss+xml"
     if the page is an HTML one. Otherwise, parse the RSS document
     fetching the needed information.
@@ -31,6 +36,7 @@ def find_alternate(url):
         return fetch_xml_info(tree, url)
     return fetch_html_info(tree, url)
 
+
 def fetch_xml_info(tree, url):
     '''Fetch information about the RSS feed from the RSS document itself'''
     result = {
@@ -48,6 +54,7 @@ def fetch_xml_info(tree, url):
 
     result['icon_path'] = find_shortcut_icon(html, result['origin'])
     return result
+
 
 def fetch_html_info(tree, url):
     '''Fetch information about the RSS feed from the HTML page'''
@@ -69,7 +76,13 @@ def fetch_html_info(tree, url):
 
     return result
 
+
 def find_shortcut_icon(tree, url):
+    '''Try to find the source's icon
+
+    If an icon is found, it'll be used in the dashboard to mark the source.
+    Otherwise, a placeholder icon will be used.
+    '''
     icon = tree.find(rel='icon') or tree.find(rel='shortcut icon')
 
     if icon is None:
