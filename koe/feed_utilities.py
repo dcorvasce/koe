@@ -1,5 +1,5 @@
 import bs4
-from urllib import request
+from urllib import request, error
 
 def user_agent():
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
@@ -11,11 +11,14 @@ def find_alternate(url):
     if the page is an HTML one. Otherwise, parse the RSS document
     fetching the needed information.
     '''
-    req = request.Request(url, None, user_agent())
+    try:
+        req = request.Request(url, None, user_agent())
 
-    response = request.urlopen(req)
-    page = response.read()
-    
+        response = request.urlopen(req)
+        page = response.read()
+    except error.URLError:
+        return None
+
     content_type = response.info().get_content_type()
     parser_type = 'html.parser'
 
