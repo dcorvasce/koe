@@ -15,6 +15,10 @@
     border-bottom: 1px solid var(--border-color);
     font-family: inherit;
 
+    @media only screen and (max-width: 768px) {
+      height: auto;
+    }
+
     & a {
       color: var(--link-color);
       transition: 0.3s ease-in color;
@@ -36,11 +40,18 @@
       display: flex;
       align-items: center;
       box-sizing: border-box;
+
+      @media only screen and (max-width: 768px) {
+        width: 90%;
+        margin: 0 5%;
+        height: auto;
+
+      }
     }
 
     & .navbar__brand {
-      font-size: 0.9em;
-      color: inherit;
+      font-size: 0.8em;
+      color: inherit !important;
       text-decoration: none !important;
     }
 
@@ -55,7 +66,7 @@
       margin: 0 20px;
 
       & a {
-        font-size: 0.9em;
+        font-size: 0.8em;
         text-transform: uppercase;
       }
     }
