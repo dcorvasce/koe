@@ -25,7 +25,7 @@ def get_date_formats():
 def fetch_active_sources():
     '''Fetches only the sources which have subscriptions'''
     query = '''
-            SELECT sources.id, sources.latestlink_fetched, sources.rss_uri AS uri
+            SELECT DISTINCT sources.rss_uri AS uri, sources.id, sources.latestlink_fetched
             FROM sources
             WHERE (SELECT COUNT(*) FROM subscriptions WHERE source_id = sources.id) > 0
             ORDER BY sources.id DESC
@@ -62,11 +62,18 @@ def get_article_body(item, piece):
         content = piece['title']
     return content
 
+def article_exists(item):
+    uri = item.link.text
+    articles = db.selectAll('SELECT * FROM articles WHERE uri = %s', uri)
+
+    return len(articles) > 0
+
 def fetch_news():
     sources = fetch_active_sources()
-    articles_fetched = 0
+    MAX_ARTICLES_PER_SOURCE = 30
 
     for source in sources:
+        articles_fetched = 0
         print('Fetching news for %s...' % source['uri'])
 
         source_id = source['id']
@@ -77,10 +84,13 @@ def fetch_news():
         items = tree.findAll('item') or tree.findAll('entry')
 
         for item in items:
+            if article_exists(item):
+                continue
+
             if index_link is None:
                 index_link = item.link.text
 
-            if latestlink_fetched == index_link:
+            if latestlink_fetched == index_link or articles_fetched == MAX_ARTICLES_PER_SOURCE:
                 break
             articles_fetched += 1
 
@@ -96,7 +106,6 @@ def fetch_news():
             db.query('UPDATE sources SET latestlink_fetched = %s WHERE id = %s', (index_link, source_id))
         except Exception:
             print('An error occured, unable to save the items')
-    print('Articles fetched: %d' % articles_fetched)
 
 if __name__ == '__main__':
     fetch_news()
