@@ -1,7 +1,6 @@
 const sourcesListeners = require('./event_listeners/sources');
 const authListeners = require('./event_listeners/auth');
 const newsListeners = require('./event_listeners/news');
-const pagingListeners = require('./event_listeners/paging');
 
 (function IIFE() {
     const news = document.querySelector('.news');
