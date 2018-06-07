@@ -65,8 +65,8 @@ class FeedController(Controller):
         return dumps({'ok': True})
 
     def __create_source_unless_exists(self, rss):
-        query = 'SELECT id FROM sources WHERE uri = %s'
-        sources = self.database.selectAll(query, rss['origin'])
+        query = 'SELECT id FROM sources WHERE uri = %s OR rss_uri = %s'
+        sources = self.database.selectAll(query, (rss['origin'], rss['uri']))
 
         if len(sources) == 0:
             record = {
