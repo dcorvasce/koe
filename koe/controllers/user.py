@@ -51,3 +51,37 @@ class UserController(Controller):
                 '''
 
         return self.database.selectAll(query, user_id)
+    
+    def get_user_favourite_articles(self):
+        '''Fetches all the user's favourite articles'''
+        user_id = self.session['user_id'] or 0
+        query = '''
+                SELECT articles.*, sources.icon_path, sources.id AS origin_id,
+                sources.uri AS origin_uri, sources.title AS origin_title
+                FROM sources, subscriptions, articles, user_favouritearticles
+                WHERE sources.id = subscriptions.source_id
+                AND subscriptions.user_id = user_favouritearticles.user_id
+                AND articles.source_id = subscriptions.source_id
+                AND user_favouritearticles.article_id = articles.id
+                AND user_favouritearticles.user_id = %s
+                ORDER BY user_favouritearticles.created_at DESC LIMIT 20
+                '''
+        return self.database.selectAll(query, user_id)
+
+    def show_profile(self):
+        '''Show user profile page'''
+        user_id = self.session.get('user_id')
+        if user_id is None:
+            return redirect('/')
+        
+        query = '''
+                SELECT *, DATE_FORMAT(created_at, '%%d %%b %%Y') AS registered_since
+                FROM users WHERE id = %s
+                '''
+        rows = self.database.selectAll(query, user_id)
+        user = rows[0]
+
+        favourites = self.get_user_favourite_articles()
+        sources = self.get_user_feeds()
+        return render_template('users/profile.html', user=user,
+                                                     favourites=favourites, sources=sources)

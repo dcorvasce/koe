@@ -62,3 +62,8 @@ def sign_in():
 def sign_out():
     session['user_id'] = None
     return redirect('/')
+
+@app.route('/profile', methods=['GET'])
+def show_profile():
+    controller = UserController(conn, session)
+    return controller.show_profile()

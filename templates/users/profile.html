@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme-color" content="#333">
+
+  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="shortcut icon" href="/static/icon.png">
+  <link rel="manifest" href="/static/manifest.json">
+
+  <title>Your Profile &mdash; Koe</title>
+</head>
+<body>
+  <nav class="navbar">
+    <section class="navbar__wrapper">
+      <header>
+        <a href="/" class="navbar__brand"><h1>Koe</h1></a>
+      </header>
+      <ul class="navbar__nav">
+        <li><a href="/">Feed</a></li>
+        <li><a class="active">Profile</a></li>
+        <li><a href="#" data-action="sign-out">Sign out</a></li>
+      </ul>
+    </section>
+  </nav>
+
+  <div class="container is-fixed">
+      <section class="row">
+          <header class="profile-header">
+              <h2 class="is-large">Welcome, {{ user['first_name'] }} {{ user['last_name'] }}</h2>
+              <p class="subtitle">Registered since {{ user['registered_since'] }}</p>
+          </header>
+      </section>
+  </div>
+
+  <div class="container is-fixed">
+    <div class="container">
+      <section class="row">
+        <header>
+          <h2 class="is-large"><i class="fas fa-globe"></i> Sources ({{ sources|length }})</h2>
+        </header>
+      </section>
+      <section class="row">
+        {% for source in sources %}
+          <figure class="news-article__source">
+            <img src="{{ source['icon_path'] }}" alt="{{ source['title'] }}" aria-hidden="true">
+      
+            <ficaption>
+              <a href="{{ source['uri'] }}" target="_blank">{{ source.title }}</a>
+            </figcaption>
+
+            <a data-source-id="{{ source['id'] }}" data-action="delete-source">&times;</i></a>
+          </figure>
+        {% endfor %}
+      </section>
+    </div>
+
+    <div class="container">
+      <section class="row">
+        <header>
+          <h2 class="is-large"><i class="fas fa-star"></i> Starred ({{ favourites|length }})</h2>
+        </header>
+      </section>
+      <section class="row news">
+        {% for article in favourites %}
+          <article class="news-article" data-source-id="{{ article['origin_id'] }}">
+            <header class="news-article__header">
+              <a href="{{ article['uri'] }}" target="_blank"><h3>{{ article['title'] }}</h3></a>
+            </header>
+            <footer class="news-article__metadata">
+              <figure class="news-article__source">
+                <img src="{{ article['icon_path'] }}"
+                     alt="{{ article['origin_title'] }}" aria-hidden="true">
+
+                <ficaption>
+                  <a href="{{ article['origin_uri'] }}">{{ article['origin_title'] }}</a>
+
+                  <section class="news-article__details">
+                    <span class="news-article__date">{{ article['published_at'] }}</span>
+                    <span class="news-article__category">{{ article['category'] }}</span>
+                  </section>
+                </figcaption>
+              </figure>
+            </footer>
+          </article>
+        {% endfor %}
+
+        {% if favourites|length == 0 %}
+          <p class="subtitle">Looks like you don't have starred any article yet :(</p>
+        {% endif %}
+      </section>
+    </div>
+  </div>
+</body>
+
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</script>
+</html>

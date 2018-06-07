@@ -66,3 +66,17 @@ a {
     margin: 0 5%;
   }
 }
+
+/* Container */
+
+.container.is-fixed {
+  width: 70%;
+  margin: 0 15%;
+  display: flex;
+}
+
+@media only screen and (max-width: 1024px) {
+  .container.is-fixed {
+    flex-wrap: wrap;
+  }
+}

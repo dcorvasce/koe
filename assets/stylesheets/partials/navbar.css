@@ -21,7 +21,8 @@
 
       &:hover,
       &:focus,
-      &:active {
+      &:active,
+      &.active {
         color: var(--link-hover-color);
         text-decoration: none;
         transition: 0.3s ease-out color;

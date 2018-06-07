@@ -37,7 +37,7 @@ module.exports = {
                         method: 'POST',
                         credentials: 'same-origin',
                     }).then(() => {
-                        location.reload();
+                        location.href = '/';
                     });
                 }
             });
