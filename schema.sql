@@ -7,29 +7,28 @@ CREATE TABLE users (
   created_at TIMESTAMP NOT NULL,
 
   UNIQUE(email)
-) CHARACTER SET 'utf8mb4';
+) CHARACTER SET 'utf8mb4' ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE sources (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  uri VARCHAR(1024) NOT NULL,
+  uri TEXT NOT NULL,
   title TEXT NOT NULL,
   rss_uri TEXT NOT NULL,
   icon_path TEXT NOT NULL,
   latestlink_fetched TEXT NULL,
-  created_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP NOT NULL
 
-  UNIQUE(uri)
-) CHARACTER SET 'utf8mb4';
+) CHARACTER SET 'utf8mb4' ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE articles (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
   uri TEXT NOT NULL,
   title TEXT NOT NULL,
-  category VARCHAR(255) NOT NULL DEFAULT 'General',
+  category TEXT NOT NULL,
   source_id INT NOT NULL REFERENCES sources(id),
   published_at TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL
-) CHARACTER SET 'utf8mb4';
+) CHARACTER SET 'utf8mb4' ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE subscriptions (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -38,7 +37,7 @@ CREATE TABLE subscriptions (
   created_at TIMESTAMP NOT NULL,
 
   UNIQUE(user_id, source_id)
-);
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE user_favouritearticles (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -47,4 +46,4 @@ CREATE TABLE user_favouritearticles (
   created_at TIMESTAMP NOT NULL,
 
   UNIQUE(user_id, article_id)
-);
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
