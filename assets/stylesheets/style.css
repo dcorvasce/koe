@@ -15,7 +15,8 @@
   flex-grow: 2 !important;
   flex-shrink: 0.5;
 
-  & .main-header {
+  & .main-header,
+  & footer {
     display: flex;
 
     & h2,
@@ -28,6 +29,15 @@
       justify-content: flex-end;
       align-self: center;
       justify-self: flex-end;
+    }
+  }
+
+  & footer {
+    & form {
+      justify-content: flex-start;
+      align-self: center;
+      justify-self: flex-start;
+      margin: 0;
     }
   }
 }

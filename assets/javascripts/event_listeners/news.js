@@ -84,6 +84,7 @@ module.exports = {
     },
     addCategoryFilterListener: (news, sourceFilter, categoryFilter) => {
         if (news && categoryFilter) {
+            categoryFilter.addEventListener('submit', (ev) => ev.preventDefault);
             categoryFilter.addEventListener('change', (ev) => {
                 ev.preventDefault();
         

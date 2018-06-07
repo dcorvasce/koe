@@ -1,6 +1,7 @@
 const sourcesListeners = require('./event_listeners/sources');
 const authListeners = require('./event_listeners/auth');
 const newsListeners = require('./event_listeners/news');
+const pagingListeners = require('./event_listeners/paging');
 
 (function IIFE() {
     const news = document.querySelector('.news');
@@ -15,6 +16,9 @@ const newsListeners = require('./event_listeners/news');
 
     authListeners.addSignFormListener();
     authListeners.addSignOutListener();
+
+    pagingListeners.addNextPageListener();
+    pagingListeners.addPreviousPageListener();
 
     newsListeners.attachFavouritesListeners();
 })();

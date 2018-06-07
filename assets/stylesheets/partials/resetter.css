@@ -2,6 +2,8 @@
   --font-family: 'IBM Plex Sans', 'Open Sans', 'Helvetica Neue', sans-serif;
   --background-color: #f8f8f8;
   --foreground-color: #333;
+  --lightest-color: #fff;
+  --border-color: #d7d7d7;
 }
 
 html, body {
@@ -11,6 +13,10 @@ html, body {
   color: var(--foreground-color);
   background-color: var(--background-color);
   font-size: 16px;
+}
+
+body {
+  padding-bottom: 40px;
 }
 
 a {

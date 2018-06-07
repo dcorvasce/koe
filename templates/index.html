@@ -74,18 +74,18 @@
         <header class="main-header">
           <h2 class="is-large"><i class="fas fa-rss-square"></i> Feed</h2>
           <form class="inline-form category-filter">
-              <select name="category">
-                <option value="all" selected>All categories</option>
-                <option value="business">Business</option>
-                <option value="entertainment">Entertainment</option>
-                <option value="politics">Politics</option>
-                <option value="tech">Tech</option>
-                <option value="sport">Sport</option>
-                <option value="health">Health</option>
-                <option value="world">World</option>
-                <option value="us">US</option>
-              </select>
-            </form>
+            <select name="category">
+              <option value="all" selected>Filter by category</option>
+              <option value="business">Business</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="politics">Politics</option>
+              <option value="tech">Tech</option>
+              <option value="sport">Sport</option>
+              <option value="health">Health</option>
+              <option value="world">World</option>
+              <option value="us">US</option>
+            </select>
+          </form>
         </header>
       </section>
       <section class="row news">
@@ -124,8 +124,13 @@
           </article>
         {% endfor %}
       </section>
+      <footer>
+        <form class="inline-form category-filter">
+          <button data-action="previous-page">Previous</button>
+          <button data-action="next-page">Next</button>
+        </form>
+      </footer>
     </div>
-
   </div>
 </body>
 
