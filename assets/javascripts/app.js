@@ -21,6 +21,33 @@
         });
     };
 
+    const attachFavouritesListeners = () => {
+        const favourites = document.querySelectorAll('[data-action="add-favourite"]');
+
+        favourites.forEach((favourite) => {
+            favourite.addEventListener('click', (ev) => {
+                ev.preventDefault();
+
+                const target = ev.target;
+                const targetLabel = target.querySelector('span');
+                const articleId = target.getAttribute('data-article-id');
+    
+                target.classList.toggle('active');
+    
+                if (targetLabel.innerText === 'Add to favourites') {
+                    targetLabel.innerText = 'Starred';
+                } else {
+                    targetLabel.innerText = 'Add to favourites';
+                }
+    
+                fetch(`/favourites/${articleId}`, {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                });
+            });
+        });
+    };
+
     const sourceForm = document.querySelector('.source-form');
   
     if (sourceForm) {
@@ -106,6 +133,8 @@
 
                             newsContainer.innerHTML += article;
                         });
+
+                        attachFavouritesListeners();
                     });
             }).catch((error) => {
                 console.log(error);
@@ -156,6 +185,8 @@
 
                             newsContainer.innerHTML += article;
                         });
+
+                        attachFavouritesListeners();
                     });
             }).catch((error) => {
                 console.log(error);
@@ -199,26 +230,5 @@
         });
     });
 
-    const favourites = document.querySelectorAll('[data-action="add-favourite"]');
-
-    favourites.forEach((favourite) => {
-        favourite.addEventListener('click', (ev) => {
-            const target = ev.target;
-            const targetLabel = target.querySelector('span');
-            const articleId = target.getAttribute('data-article-id');
-
-            target.classList.toggle('active');
-
-            if (targetLabel.innerText === 'Add to favourites') {
-                targetLabel.innerText = 'Starred';
-            } else {
-                targetLabel.innerText = 'Add to favourites';
-            }
-
-            fetch(`/favourites/${articleId}`, {
-                method: 'POST',
-                credentials: 'same-origin'
-            });
-        });
-    });
+    attachFavouritesListeners();
 })();
