@@ -42,7 +42,7 @@ class UserController(Controller):
                 FROM sources, subscriptions, articles
                 WHERE sources.id = subscriptions.source_id AND subscriptions.user_id = %s
                 AND articles.source_id = subscriptions.source_id
-                ORDER BY published_at DESC LIMIT 20
+                ORDER BY published_at DESC LIMIT 5
                 '''
 
         return self.database.select_all(query, user_id)

@@ -51,7 +51,7 @@ class FeedController(Controller):
             query += ' AND articles.category = %s'
             params.append(category)
 
-        query += 'ORDER BY published_at DESC LIMIT %s,10'
+        query += 'ORDER BY published_at DESC LIMIT %s,5'
         offset = int(page) * 10
         params.append(offset)
 

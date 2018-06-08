@@ -81,11 +81,15 @@
   margin-right: 20px;
 
   & img {
-    width: 42px;
-    height: 42px;
+    width: 42px !important;
+    height: 42px !important;
     border: 1px solid transparent;
     margin-right: 10px;
     border-radius: 5px;
+  }
+
+  & a[href] {
+    display: flex;
   }
 
   & a[data-action="delete-source"] {

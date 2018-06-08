@@ -62,7 +62,7 @@ module.exports = {
                 const template = document.querySelector('#article-template').innerHTML;
                 const newsContainer = document.querySelector('.news');
                 let params = `source_id=${sourceId}`;
-                
+
                 if (parseInt(sourceId) === 0) {
                     location.href = '/';
                     return;
@@ -97,24 +97,24 @@ module.exports = {
                 const moreButton = document.querySelector('[data-action="more-news"]');
                 moreButton.classList.remove('hidden');
                 moreButton.setAttribute('data-page', 1);
-        
+
                 const form = ev.target;
                 const sourceId = document.querySelector('select[name="source_id"] option:checked').value;
                 const category = form.querySelector('select[name="category"] option:checked').value;
                 const template = document.querySelector('#article-template').innerHTML;
                 const newsContainer = document.querySelector('.news');
-        
+
                 let params = `category=${category}`;
-        
+
                 if (category === 'all') {
                     location.href = '/';
                     return;
                 }
-        
+
                 if (parseInt(sourceId) !== 0) {
                     params += `&source_id=${sourceId}`;
                 }
-        
+
                 fetch(`/news?${params}`, {
                     method: 'GET',
                     credentials: 'same-origin',
@@ -150,7 +150,7 @@ module.exports = {
                 if (category !== 'all') {
                     params += `&category=${category}`;
                 }
-        
+
                 if (parseInt(sourceId) !== 0) {
                     params += `&source_id=${sourceId}`;
                 }
@@ -162,7 +162,7 @@ module.exports = {
                     response
                         .json()
                         .then((news) => {
-                            if (news.length == 0) {
+                            if (news.length == []) {
                                 ev.target.classList.add('hidden');
                             } else {
                                 ev.target.setAttribute('data-page', parseInt(page) + 1);
