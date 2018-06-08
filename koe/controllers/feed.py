@@ -52,7 +52,7 @@ class FeedController(Controller):
             params.append(category)
 
         query += 'ORDER BY published_at DESC LIMIT %s,5'
-        offset = int(page) * 10
+        offset = int(page) * 5
         params.append(offset)
 
         news = self.database.select_all(query, tuple(params))
