@@ -4,12 +4,14 @@ module.exports = {
             const errorContainer = document.querySelector('.error-container');
             errorContainer.innerText = '';
             errorContainer.classList.remove('fade-out');
+            errorContainer.classList.remove('info');
 
             response
                 .json()
                 .then((body) => {
                     if (body.ok) {
-                        return location.reload();
+                        location.reload();
+                        return;
                     }
 
                     errorContainer.innerText = body.error;

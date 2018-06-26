@@ -138,6 +138,14 @@
   padding: 10px;
   box-sizing: border-box;
   font-size: 0.9em;
+
+  &.info {
+    color: inherit;
+  }
+
+  &.info svg {
+    animation: 0.7s spin infinite linear;
+  }
 }
 
 .error-container.fade-out {
