@@ -1,4 +1,9 @@
-@import "./partials/*";
+@import "./partials/form";
+@import "./partials/navbar";
+@import "./partials/news-article";
+@import "./partials/resetter";
+@import "./partials/toolbar";
+@import "./partials/typography";
 
 .dashboard {
   width: 70%;

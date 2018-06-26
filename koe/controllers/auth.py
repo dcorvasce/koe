@@ -37,6 +37,9 @@ class AuthController(Controller):
         user_id = self.database.insert('users', user)
         self.session['user_id'] = user_id
 
+        self.logger.info('Create new user with email %s' % user['email'])
+        self.logger.info('Create new session for %s' % user['email'])
+
         return dumps({'ok': True})
 
 
@@ -60,6 +63,8 @@ class AuthController(Controller):
             return dumps({'error': 'Wrong password'})
 
         self.session['user_id'] = user['id']
+
+        self.logger.info('Sign in with success - %s' % params['email'])
         return dumps({'ok': True})
 
 
