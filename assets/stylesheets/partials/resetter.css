@@ -61,6 +61,10 @@ a {
   font-weight: bold;
 }
 
+@media only screen and (max-width: 768px) {
+  .subtitle { text-align: center; }
+}
+
 /* Rows */
 
 .row-70 {
