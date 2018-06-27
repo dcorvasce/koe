@@ -34,6 +34,13 @@ const attachFavouritesListeners = () => {
             if (targetLabel.innerText === 'Add to favourites') {
                 targetLabel.innerText = 'Starred';
             } else {
+                if (target.classList.contains('force-hiding')) {
+                    target.parentElement.remove();
+
+                    const starredCounter = document.querySelector('.starred-articles');
+                    starredCounter.innerText = parseInt(starredCounter.innerText) - 1;
+                }
+
                 targetLabel.innerText = 'Add to favourites';
             }
 

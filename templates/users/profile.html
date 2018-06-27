@@ -61,12 +61,19 @@
     <div class="container">
       <section class="row">
         <header>
-          <h2 class="is-large"><i class="fas fa-star"></i> Starred ({{ favourites|length }})</h2>
+          <h2 class="is-large">
+            <i class="fas fa-star"></i>
+            Starred (<span class="starred-articles">{{ favourites|length }}</span>)
+          </h2>
         </header>
       </section>
       <section class="row news">
         {% for article in favourites %}
           <article class="news-article" data-source-id="{{ article['origin_id'] }}">
+            <button data-action="add-favourite" data-article-id="{{ article['id'] }}" class="active force-hiding">
+              <i class="fas fa-star"></i>
+              <span>Starred</span>
+            </button>
             <header class="news-article__header">
               <a href="{{ article['uri'] }}" target="_blank"><h3>{{ article['title'] }}</h3></a>
             </header>

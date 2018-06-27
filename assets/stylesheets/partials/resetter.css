@@ -124,6 +124,10 @@ a {
   display: none !important;
 }
 
+button[data-action="add-favourite"] {
+  cursor: pointer;
+}
+
 button[data-action="add-favourite"] > * {
   pointer-events: none;
 }
