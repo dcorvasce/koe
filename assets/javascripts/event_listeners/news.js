@@ -37,8 +37,8 @@ const attachFavouritesListeners = () => {
                 if (target.classList.contains('force-hiding')) {
                     target.parentElement.remove();
 
-                    const starredCounter = document.querySelector('.starred-articles');
-                    starredCounter.innerText = parseInt(starredCounter.innerText) - 1;
+                    const starredCount = document.querySelector('.starred-articles');
+                    starredCount.innerText = parseInt(starredCount.innerText) - 1;
                 }
 
                 targetLabel.innerText = 'Add to favourites';
@@ -91,7 +91,7 @@ module.exports = {
                         });
                 }).catch((error) => {
                     console.log(error);
-                })
+                });
             });
         }
     },
@@ -149,17 +149,22 @@ module.exports = {
                 const newsContainer = document.querySelector('.news');
 
                 const page = ev.target.getAttribute('data-page') || 1;
-                const sourceId = document.querySelector('[name="source_id"] option:checked').value;
-                const category = document.querySelector('[name="category"] option:checked').value;
-
                 let params = `page=${page}`;
 
-                if (category !== 'all') {
-                    params += `&category=${category}`;
-                }
+                if (ev.target.getAttribute('data-only-starred') === 'true') {
+                    params += '&starred=1'
+                } else {
+                    const sourceId = document.querySelector('[name="source_id"] option:checked').value;
+                    const category = document.querySelector('[name="category"] option:checked').value;
 
-                if (parseInt(sourceId) !== 0) {
-                    params += `&source_id=${sourceId}`;
+
+                    if (category !== 'all') {
+                        params += `&category=${category}`;
+                    }
+
+                    if (parseInt(sourceId) !== 0) {
+                        params += `&source_id=${sourceId}`;
+                    }
                 }
 
                 fetch(`/news?${params}`, {

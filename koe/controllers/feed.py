@@ -28,6 +28,7 @@ class FeedController(Controller):
         user_id = self.session['user_id'] or 0
         source_id = request.args.get('source_id')
         category = request.args.get('category')
+        starred = request.args.get('starred')
         page = request.args.get('page') or 0
         params = [user_id]
 
@@ -50,6 +51,15 @@ class FeedController(Controller):
         if category is not None:
             query += ' AND articles.category = %s'
             params.append(category)
+
+        if starred is not None and starred == '1':
+            query += '''
+                AND (
+                    SELECT COUNT(*) FROM user_favouritearticles
+                    WHERE user_favouritearticles.user_id = subscriptions.user_id
+                    AND article_id = articles.id
+                ) > 0
+            '''
 
         query += 'ORDER BY published_at DESC LIMIT %s,5'
         offset = int(page) * 5

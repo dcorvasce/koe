@@ -71,9 +71,16 @@ class UserController(Controller):
                 AND articles.source_id = subscriptions.source_id
                 AND user_favouritearticles.article_id = articles.id
                 AND user_favouritearticles.user_id = %s
-                ORDER BY user_favouritearticles.created_at DESC LIMIT 20
+                ORDER BY user_favouritearticles.created_at DESC LIMIT 5
                 '''
         return self.database.select_all(query, user_id)
+
+    def get_user_favourites_count(self, user_id=None):
+        '''Fetches all the user's favourite articles'''
+        user_id = user_id or self.session['user_id'] or 0
+        query = 'SELECT COUNT(*) AS starred FROM user_favouritearticles WHERE user_id = %s'
+
+        return self.database.select_all(query, user_id)[0]['starred']
 
 
     def show_profile(self, user_id=None):
@@ -90,10 +97,13 @@ class UserController(Controller):
         user = rows[0]
 
         favourites = self.get_user_favourite_articles(user_id)
+        favourites_count = self.get_user_favourites_count(user_id)
         sources = self.get_user_feeds(user_id)
+
         return render_template('users/profile.html',
                                external=user_id != self.session.get('user_id'),
-                               user=user, favourites=favourites, sources=sources)
+                               user=user, favourites=favourites, sources=sources,
+                               favourites_count=favourites_count)
 
 
     def show_external_profile(self, email):
