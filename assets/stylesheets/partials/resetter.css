@@ -123,3 +123,7 @@ a {
 .hidden {
   display: none !important;
 }
+
+button[data-action="add-favourite"] > * {
+  pointer-events: none;
+}
