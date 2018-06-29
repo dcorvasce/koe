@@ -4,8 +4,8 @@ from flask import request, redirect, render_template
 from koe.db_utilities import DB
 
 class Controller(object):
-    def __init__(self, db_connection, session, logger):
-        self.database = DB(db_connection, db_connection.cursor(cursors.DictCursor))
+    def __init__(self, session, logger):
+        self.database = DB()
         self.session = session
         self.logger = logger
 

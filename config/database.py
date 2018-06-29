@@ -4,5 +4,7 @@ from dotenv import load_dotenv
 from pymysql import connect
 
 load_dotenv()
-conn = connect(getenv('DB_HOST'), getenv('DB_USER'),
-               getenv('DB_PASSWORD'), getenv('DB_NAME'), charset='utf8', autocommit=True)
+
+def create_connection():
+    return connect(getenv('DB_HOST'), getenv('DB_USER'),
+                   getenv('DB_PASSWORD'), getenv('DB_NAME'), charset='utf8')

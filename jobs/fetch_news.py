@@ -10,11 +10,10 @@ from urllib import request
 from bs4 import BeautifulSoup
 from pymysql import cursors
 from classifier.classifier import classify
-from config.database import conn
 from koe.db_utilities import DB
 from koe.feed_utilities import user_agent
 
-db = DB(conn, conn.cursor(cursors.DictCursor))
+db = DB()
 
 def fetch_item_data(source_id, item):
     '''Fetch the essential information from a feed item'''
