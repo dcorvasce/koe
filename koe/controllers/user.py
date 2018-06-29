@@ -78,7 +78,16 @@ class UserController(Controller):
     def get_user_favourites_count(self, user_id=None):
         '''Fetches all the user's favourite articles'''
         user_id = user_id or self.session['user_id'] or 0
-        query = 'SELECT COUNT(*) AS starred FROM user_favouritearticles WHERE user_id = %s'
+        query = '''
+                SELECT COUNT(user_favouritearticles.id) AS starred
+                FROM sources, subscriptions, articles, user_favouritearticles
+                WHERE sources.id = subscriptions.source_id
+                AND subscriptions.user_id = user_favouritearticles.user_id
+                AND articles.source_id = subscriptions.source_id
+                AND user_favouritearticles.article_id = articles.id
+                AND user_favouritearticles.user_id = %s
+
+                '''
 
         return self.database.select_all(query, user_id)[0]['starred']
 
